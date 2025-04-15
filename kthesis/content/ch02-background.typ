@@ -17,22 +17,30 @@ For each interaction a user will have with the system, it will register as an ed
 
 A classical approach to that problem is to measure how close each item is to the user in the graph.
 Research in graph theory has provided us with a range of different ways to compute closeness between two nodes, such as measuring the shortest path connecting them, how many neighbors they share or how exclusive their common neighbors are.
-The main issue with this approach is that it can only leverage structural data from the underlying graph while most of the applications provide rich context features for the users and the items. 
-// These features could be efficiently used through machine learning algorithms to obtain good predictions of the next interactions as well.
 
-- There are too many information, thus we need smarter way to select it.
-- A popular solution nowadays is through recommendations: each user is being recommended personalized suggestions that are tailored to fit their needs, based on their past interactions.
+The main issue with this approach is that it can only leverage structural data from the underlying graph while most of the applications provide rich context features for the users and the items.
+Features like such are typical inputs for Machine Learning systems, that inspired Lichtenwalter et al. to approach link prediction as a supervised problem@new-perspectives-methods-link-prediction.
+Given a user and an item, the task is now to evaluate how likely it is that an edge will form between them in the future, based on the knowledge of the user features, the item features and a range of similarity measures computed on the past interactions graph.
 
-- The problem of recommendation is often formulated as for each user, create a ranking of the items. Past interactions are represented as edges in a graph were users and items are nodes.
+This typical machine learning setup leads to switch from a straightforward prediction setting to a feature engineering approach when it comes to graph-based data.
+Instead of looking for the desired property in the structure of the graph, this approach will try to summarize the structure into rich representation compatible with machine learning algorithm.
+The goal is not to proxy the desired property, but to create a rich representation of the graph data that can be used by a machine learning algorithm.
 
-- Collaborative filtering is the process of exploiting not only the user's past interactions but also the interactions of similar users. Example, movies.
-- A classical way to tackle the problem is to use graph-based metrics to measure how much related each item is to the user's preferences. Examples of this are distance, Adamic-Adar distance, etc.
-- These solutions are quite limited because they rely solely on the structure of the interactions, disregarding any additional knowledge on the users, items or interactions. This lead to the use of machine learning approaches.
-- One can use the graph-based metrics as features for a traditional ML pipeline.
+// - There are too many information, thus we need smarter way to select it.
+// - A popular solution nowadays is through recommendations: each user is being recommended personalized suggestions that are tailored to fit their needs, based on their past interactions.
 
-- ML opened a new opportunity: computing scores for all pairs is expensive, ML can be used to produced embeddings of users and items separately and use their distances as scores instead. Allow for pre-computing embeddings of items and much faster recommendations. (and better scalability).
+// - The problem of recommendation is often formulated as for each user, create a ranking of the items. Past interactions are represented as edges in a graph were users and items are nodes.
+
+// - Collaborative filtering is the process of exploiting not only the user's past interactions but also the interactions of similar users. Example, movies.
+// - A classical way to tackle the problem is to use graph-based metrics to measure how much related each item is to the user's preferences. Examples of this are distance, Adamic-Adar distance, etc.
+// - These solutions are quite limited because they rely solely on the structure of the interactions, disregarding any additional knowledge on the users, items or interactions. This lead to the use of machine learning approaches.
+// - One can use the graph-based metrics as features for a traditional ML pipeline.
+
+// - ML opened a new opportunity: computing scores for all pairs is expensive, ML can be used to produced embeddings of users and items separately and use their distances as scores instead. Allow for pre-computing embeddings of items and much faster recommendations. (and better scalability).
 
 == Graph Representation Learning <graph-representation-learning>
+
+
 
 - The task of learning embeddings from graphs is called GRL and have applications outside link-prediction: node-level, edge-level, graph-level (molecule graphs, ask gpt).
 - Two approaches have been used so far: random walk based and GNNs. Random walk are used to create node sequences that are then fed to sequence based models of the same kind as Language models. GNNs are NN using the structure of the graphs to pass information through nodes.
