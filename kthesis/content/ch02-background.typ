@@ -2,7 +2,7 @@
 = Background
 
 This chapter provide the background for the project. In @bg:link-prediction we provide an overview of link prediction and the classical solutions for the problem, in @bg:grl we further develop the concept of graph embeddings and some common methods to create them.
-Then in @bg:dynamic-graphs we discuss the addition of a time dimension in graph-shaped data and the solution to exploit it.
+Then in @bg:dynamic-graphs we discuss the addition of a time dimension in graph-shaped data and the solution to exploit it, followed by a presentation of cross-RNN architectures in @bg:cross-rnn.
 Finally we present the model of interest for this work in @bg:limnet and why we believe that it is a relevant addition to the task of link prediction.
 
 == Link Prediction <bg:link-prediction>
@@ -93,17 +93,49 @@ Because of this, we tend to approach such graphs as a stream of interactions rat
 // - CTDG can be seen as a stream of interactions instead of a stable graph structure. Thus, graphs concepts such as neighborhood become blurred.
 
 A popular approach to leverage temporal data when creating nodes embeddings is to maintain a memory of the embeddings and update them as interactions are read.
+One of the building block for this approach is DeepCoevolve@deepcoevolve that uses a cross-RNN to update the representation of the users and items, followed by an intensity function to predict the best match at every given time $t$.
+Cross-RNN are detailed further in @bg:cross-rnn.
+Following DeepCoevolve, other cross-RNN models have been proposed with notables performance upgrade.
 
+JODIE@jodie is a model that builds upon DeepCoevolve by adding a static embedding component to the representation, using the Cross-RNN part to track the users and items trajectories, along with using a neural network layer to perform the projection operation carried over by the intensity function in DeepCoevolve.
 
-@ac:deepred is an approach to compute embeddings for link prediction from @tin's data, proposed by Kefato et al. in @deepred.
-This approach uses a sliding window of 
+DeePRed@deepred is an other approach building on top of DeepCoevolve, this time with the aim to accelerate and simplify the training by getting rid of the recurrence in the cross-RNN mechanism.
+To achieve this, the dynamic embeddings, that create the recurrence, are replaced with static trained embeddings.
+The lack of long term information passing, is compensated by the use of a sliding context window coupled with an attention mechanism to best identify the meaningful interactions.
 
-- Approaches to cope with this added dificulty include using a window of past interactions to feed into a ML system (e.g. cross-attention with DeePRed).
-- A common solution since deepcoevolve is to use cross-RNN. The system keeps a memory of each node and will have these memories "interact" to update each other whenever an interaction is observed.
-- This approach has the benefit of conserving the causality of interactions into the embeddings.
+// - Approaches to cope with this added dificulty include using a window of past interactions to feed into a ML system (e.g. cross-attention with DeePRed).
+// - A common solution since deepcoevolve is to use cross-RNN. The system keeps a memory of each node and will have these memories "interact" to update each other whenever an interaction is observed.
+
+== Cross-RNN <bg:cross-rnn>
+
+The key mechanism for all the aforementioned models is called cross-RNN where RNN stands for Recurrent Neural Network.
+A #gls("rnn", long:false) is a neural network with the specificity of processing sequential data, passing an internal memory embeddings between each step of the sequence of inputs.
+Formally, a @rnn layer is defined as
+$
+  bold(o)(bold(i)_t) = f(bold(i)_t, bold(h)_(t-1))\
+  bold(h)_t = g(bold(i)_t, bold(h)_(t-1))
+$
+Where $t$ stands for the time step of the input $bold(i)_t$ (i.e. it's index in the sequence). $bold(o)(bold(i)_t)$ marks the output of the layer and $bold(h)_t$ represent the memory of the layer after receiving the input $bold(i)_t$.
+The functions $f$ and $g$ can vary depending on the nature of the @rnn but they will rely on weights, tuned during the model training.
+
+A Cross-RNN layer is slightly different.
+Instead of keeping track of a single memory embedding $bold(h)_t$, it maintain a memory for all nodes in the graph $bold(H)_t = (bold(h)_t^u)_(u in UU) union (bold(h)_t^i)_(i in II)$.
+For each interaction $(u,i,t,bold(f))$ the memory is updated as follow:
+$
+  bold(h)_t^u = f^u (bold(h)_(t-1)^u, bold(h)_(t-1)^i, t, bold(f)) \
+  bold(h)_t^i = f^i (bold(h)_(t-1)^i, bold(h)_(t-1)^u, t, bold(f)) \
+$
+And for all other users and nodes the memory is carried over.
+$
+  bold(h)_t^v = bold(h)_(t-1)^v wide forall v in UU \\ {u} union II \\ {i}
+$
+
+// - Present LSTM and GRU
+// - This approach has the benefit of conserving the causality of interactions into the embeddings.
+// - This approach require sequential training
 
 == LiMNet <bg:limnet>
 
-- LiMNet is such a solution that aims at being as lightweight and simple as possible, using only one RNN cell to compute the embeddings. This has the double benefit of making it very cheap to run but also very flexible with node insertion and deletion being trivial operations.
-- Description of LiMNet Architecture
-- LiMNet has proven effective on the task of botnet and fraud detection but was not initially designed to tackle link prediction. Which is what this work aims to do.
+// - LiMNet is such a solution that aims at being as lightweight and simple as possible, using only one RNN cell to compute the embeddings. This has the double benefit of making it very cheap to run but also very flexible with node insertion and deletion being trivial operations.
+// - Description of LiMNet Architecture
+// - LiMNet has proven effective on the task of botnet and fraud detection but was not initially designed to tackle link prediction. Which is what this work aims to do.
