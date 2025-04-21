@@ -51,4 +51,22 @@
     long: "Recurrent Neural Network",
     description: "A neural network whose output depends on both the inputs and on the state of an internal memory that is updated with each input.",
   ),
+  (
+    key: "lstm",
+    short: "LSTM",
+    long: "Long-Short Term Memory",
+    description: "A type of recurrent neural network designed to effectively learn and remember short and long-term dependencies in sequential data by using specialized memory cells and gating mechanisms."
+  ),
+  (
+    key: "gru",
+    short: "GRU",
+    long: "Gated Recurrent Unit",
+    description: "A type of recurrent neural network that simplifies the LSTM architecture by combining the forget and input gates into a single update gate."
+  ),
+  (
+    key: "limnet",
+    short: "LiMNet",
+    long: "Lightweight Memory Networks",
+    description: "A neural network architecture that focuses on efficient memory utilization and lightweight design for temporal interaction network embeddings computations."
+  )
 )
