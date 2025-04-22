@@ -7,6 +7,11 @@
 #show: make-glossary
 #register-glossary(acronyms)
 
+#set math.equation(
+  numbering: "(1)",
+  // supplement: equation => "("+equation.number+")",
+  supplement: [Eq.],
+)
 // Configure formatting options before invoking the template;
 // For example, uncomment below to set another font (except for covers)
 // #set text(font: "New Computer Modern")
@@ -135,12 +140,11 @@
   // Whether to include trailing "For DiVA" metadata structure section
   with-for-diva: false,
 )
-
 // Tip: when tagging elements, scope labels like <intro:goals:example>
 
-#include "./content/ch01-introduction.typ"
+// #include "./content/ch01-introduction.typ"
 #include "./content/ch02-background.typ"
-#include "./content/ch03-method.typ"
+// #include "./content/ch03-method.typ"
 
 #bibliography("../../../bibliography.bib", title: "References")
 
