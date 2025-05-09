@@ -143,8 +143,8 @@ Where $u$ is the user interacting with item $i$ at time $t$ with feature $bold(f
 @lstm and @gru cells designed for classical @rnn:pl can be used for cross-RNN, the only modification being the memory management external to the cell.
 
 The main benefit of cross-RNN architectures is that conservation of causality is granted by design.
-It comes however with a cost: the input of a cross-RNN model is sequential and cannot be made parallel.
-This cost however is mostly an issue for the training of the model, because processing one input in inference do not require to pass through the entire sequence.
+It comes, however, with a cost: the input of a cross-RNN model is sequential and cannot be made parallel.
+This cost is nonetheless mostly an issue for the training of the model, because processing one input in inference do not require to pass through the entire sequence.
 
 == LiMNet <bg:limnet>
 
