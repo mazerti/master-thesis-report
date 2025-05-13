@@ -8,8 +8,7 @@ Finally we present the model of interest for this work in @bg:limnet and why we 
 
 == Link Prediction <bg:link-prediction>
 
-The rapid expansion of digital technology has resulted in the production of an overwhelming abundance of information.
-To the point that it is a challenge to find relevant and meaningful material among the multitude.
+The rapid expansion of digital technology has resulted in the production of an overwhelming abundance of information, to the point that it is a challenge to find relevant and meaningful material among the multitude.
 To not only alleviate but also leverage this information overload, the interest have surged for search engines and recommendation systems.
 These two subjects share one common goal: filtering information.
 Among the many techniques that have emerged to tackle this task, content personalization has emerged as a significant factor.
@@ -25,9 +24,11 @@ It could be web pages, music tracks, items in an e-commerce catalog, and so on..
 For each interaction a user has with the system, it registers as an edge in the graph.
 The goal of the personalization system is to find which item is the most relevant for a given user, which is the same as predicting which interaction should be added next in the graph.
 
+// Why do we need the graph: provide an example, similar patterns
 A classical approach to that problem is to measure how close each item is to the user in the graph.
 Research in graph theory has provided us with a range of different ways to compute closeness between two nodes, such as measuring the shortest path connecting them, how many neighbors they share or how exclusive their common neighbors are.
 
+// What features provide: similar users have similar patterns
 In addition of the relationship between users and items, most real-world system provide rich information about the nature of each interactions, users, and items.
 For example, in a music streaming service, an interaction can have a type (stream, like, playlist add, ...), as well as a listening duration.
 While each song can have information attached about its genres, its length, and for users, their age, and their location.
@@ -59,7 +60,7 @@ This spatial representation allow to reduce the problem to a nearest neighbor se
 
 == Graph Representation Learning <bg:grl>
 
-The task of learning high level representation from graph data is called Graph Representation Learning, abbreviated as #gls("grl", long:false).
+The task of learning high level representation from graph data is called Graph Representation Learning, abbreviated as #gls("grl", long: false).
 @grl is a general subject in data mining, it can be used to classify graph structures such as protein graphs, to capture information from a subgraph for example by creating subgraph representation from a knowledge graph to feed into a Large Language Model.
 More commonly, @grl tries to create embeddings for nodes in a graph.
 These embeddings must capture information about the node's features but also about the context of the node in the graph, which is typically defined as the neighboring nodes and their respective features and context.
@@ -119,7 +120,7 @@ The lack of long term information passing, is compensated by the use of a slidin
 == Cross-RNN <bg:cross-rnn>
 
 The key mechanism for all the aforementioned models is called cross-RNN where RNN stands for Recurrent Neural Network.
-A #gls("rnn", long:false) is a neural network with the specificity of processing sequential data, passing an internal memory embedding between each step of the sequence of inputs.
+A #gls("rnn", long: false) is a neural network with the specificity of processing sequential data, passing an internal memory embedding between each step of the sequence of inputs.
 Formally, a @rnn layer is defined as
 $ bold(o)(bold(i)_t) = f(bold(i)_t, bold(h)_(t-1)) $
 $ bold(h)_t = g(bold(i)_t, bold(h)_(t-1)) $ <rnn:memory-update>
