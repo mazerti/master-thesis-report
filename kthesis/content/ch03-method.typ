@@ -111,13 +111,18 @@ Normalization is applied at every step.
 
 == Exploration of the baselines <m:baselines>
 
-- We wrote a framework for testing link-prediction.
-- Using this framework we tried LiMNet.
-- In addition, we proposed the following improvements:
-  - providing the model with time features
-  - Normalizing the Embeddings
-  - stacking several LiMNet Layers
-- As a comparison, we implemented 2 other state of the art models:
-  - Jodie
-  - Deepred
+We tried 2 baselines to compare with: static embeddings, and Jodie
+We also tried DeePRed but couldn't reproduce the results.
 
+Static embeddings consist of learning a static representation for each node.
+Used as a simple baseline, but is oblivious to the temporal relationships.
+Hard to apply to a real world system: need to be re-trained to account for each new interaction.
+
+Jodie is conceptually close to LiMNet.
+Has x major differences:
+- Mixes dynamic embeddings with one-hot embeddings
+- Uses a projection mechanism to account for time elapsed between interactions
+- Uses a dedicated loss function
+Our implementation is truthful to the paper except for the batching algorithm.
+Jodie allows to dynamically account for new interactions in the network without re-training.
+Jodie is not designed for node insertions/deletions.
