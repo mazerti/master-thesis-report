@@ -6,17 +6,9 @@ In @bg:link-prediction we provide an overview of link prediction and the classic
 Then in @bg:dynamic-graphs we discuss the addition of a time dimension in graph-shaped data and the way it can be exploited, followed by a presentation of cross-RNN architectures in @bg:cross-rnn.
 Finally we present the model of interest for this work in @bg:limnet and why we believe that it is a relevant addition to the task of link prediction.
 
-== Link Prediction <bg:link-prediction>
+== User-Item Link Prediction <bg:link-prediction>
 
-The rapid expansion of digital technology has resulted in the production of an overwhelming abundance of information, to the point that it is a challenge to find relevant and meaningful material among the multitude.
-To not only alleviate but also leverage this information overload, the interest have surged for search engines and recommendation systems.
-These two subjects share one common goal: filtering information.
-Among the many techniques that have emerged to tackle this task, content personalization has emerged as a significant factor.
-Instead of filtering the information in the same way for everyone, the systems will use the user's context: their search history, demographics, pasts interactions with the system, etc. to filter the information to display.
-Content personalization is the whole core of recommendation systems.
-But it is also very efficient for search engines.
-For example, the search for the term "football" should yield different results for a user interested in American football and a user interested in association football (soccer).
-
+// The beginning of this section just got moved to @i:motivation, need to rethink it a bit.
 Content personalization can commonly be represented as a link-prediction problem in a user-item graph.
 In such a graph, each user and each item is associated to a node.
 An item can be any kind of information the user is interested in.

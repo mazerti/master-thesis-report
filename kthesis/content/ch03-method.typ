@@ -30,6 +30,8 @@ Finally, we discuss in @m:baselines exploration we conducted with the baselines.
 
 == Datasets <m:datasets>
 
+The three datasets we use in this project are directly taken from the Stanford Large Network Dataset Collection (accessible at #link("snap.stanford.edu/data/index.html")).
+They have all been used in Kefato et al. in @jodie and have been reused a large number of time since then because of their use of access and 
 - we use Wikipedia, reddit, lastfm
 - describe Datasets
 - reddit is a bigger Wikipedia
