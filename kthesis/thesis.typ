@@ -142,6 +142,8 @@
 )
 // Tip: when tagging elements, scope labels like <intro:goals:example>
 
+#set table(stroke: none)
+
 #include "./content/ch01-introduction.typ"
 #include "./content/ch02-background.typ"
 #include "./content/ch03-method.typ"
