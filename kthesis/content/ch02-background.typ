@@ -153,6 +153,15 @@ If a new node is added to the graph, it's embedding can be computed immediately,
 Node deletions are even easier to handle, all it takes is to delete the corresponding embedding from the memory.
 In practice, @limnet has already proven it's potential on the task of IoT botnet detection@article:limnet and fraud detection@limnet-finance-classification, it is thus expected that it could yield satisfying results for link-prediction, while requiring less resources than State of the Art solutions.
 
+#figure(
+  image("../../../../figures/limnet-architecture.svg", width: 70%),
+  caption: "Architecture of "
+    + gls("limnet")
+    + ". User embeddings are indicated in green and items embeddings in purple.",
+  placement: auto,
+) <fig:limnet>
+
+
 // - LiMNet is such a solution that aims at being as lightweight and simple as possible, using only one RNN cell to compute the embeddings. This has the double benefit of making it very cheap to run but also very flexible with node insertion and deletion being trivial operations.
 // - Description of LiMNet Architecture
 // - LiMNet has proven effective on the task of botnet and fraud detection but was not initially designed to tackle link prediction. Which is what this work aims to do.

@@ -132,7 +132,7 @@ We did however consider two separate approaches to compute the proximity between
 The first one is to use the dot product of the normalized embeddings, which is equivalent to the cosine of the angle formed by the two embeddings with the origin of the embedding space.
 $
   "dot_product_score"(bold(e)^"user",bold(e)^"item") = bold(e)^"user" / norm(bold(e)^"user") dot bold(e)^"item" / norm(bold(e)^"item")
-$
+$ <eq:dot-product-score>
 The higher the dot-product score between the user and an item embeddings, the closer these embeddings will be and thus the item should be ranked higher for that user.
 
 The second proximity used is the L2 distance, a generalization of geometric distance to $k$-dimensional spaces.
@@ -149,54 +149,78 @@ However, it is crucial to be able to reproduce experiments and to re-use existin
 
 Thus, this framework has been developed with the goal of being easy to understand and either build upon or reproduce.
 To reach this goal, two lines have been followed through the development process: thorough documentation and functional approach.
+The systematic documentations of every function in the framework should be able to help future researchers to understand the details of the implementation faster, whether it is for reusing it or to reproduce its behavior in a new experimental context.
+With the same goal of simplicity of understanding, the state have also been gathered as much as possible into a single location: the ```python Context``` class.
+This class acts as a simple store for all stateful parts of the framework, making them never more than one variable away, wherever it is called from.
+In addition the framework has been written in a functional aspiring style, always favoring pure functions for their conceptual simplicity and consistency.
+Unfortunately this functional approach couldn't be applied on every part of the program, a notable exception being the PyTorch modules that had to be implemented in an object oriented way to accommodate PyTorch's framework.
 
-The systematic documentations of every function in the framework should be able to help future researchers to understand the 
+== Adaptations of the @limnet architecture <m:improvements>
 
-Second though a thorough documentation targeted at helping future adaptations or re-implementations.
-This also goes with a functional approach, pure functions being conceptually easier to understand than complex objects with distributed state.
-Note however, that models required a more object-oriented approach to match PyTorch design.
+This work's primary goal was to test how the @limnet model would perform for the link-prediction task.
+However, as discussed in @bg:limnet, the implementation we use is stripped down of it's inputs and outputs maps, as well as the response layer used in the original paper to fit the specific needs of the task of IoT botnet detection.
 
-== Adaptations to the @limnet architecture <m:improvements>
+=== Loss functions <m:lossses>
 
-The first goal of this work was to test how the @limnet model would perform on a link-prediction task.
-The implementation we used of @limnet is notably stripped down of it's inputs and outputs maps, as well as the response layer used in the original paper to fit the specific needs of the task of IoT botnet detection @article:limnet.
+We also had to adapt the loss used to train @limnet because, unlike botnet detection, link-prediction isn't a classification setting so we couldn't use cross entropy Loss as the original model did.
+Instead we decided to use a mix of two losses.
+The first is an objective loss to minimize the distance between the embedding of the interacting user and item, it is calculated using the mean squared error for the embeddings or their dot product to 1.
+And the second is an regularization loss to maximize the information retention by maximizing the distance between different users and between different items.
+This loss is computed as follow:
+$ L_"reg" = bold(U) bold(U)^T + bold(I)bold(I)^T $
+Where $bold(U)$ and $bold(I)$ are respectively the matrix containing all the users embeddings and the matrix containing all the items embeddings.
 
 In addition of this simplification, we tried to enhance the model with three separate additions: adding time features, normalizing the embeddings and stacking several @limnet layers.
 
 === Addition of time features <m:time-features>
 
-We made the assumption that user behaviors follow cyclic patterns.
-Thus we tested if adding time features could improve the model.
-We did not have access to explicit timestamps, so we went for a simple approach.
-We computed time features as sine and cosine of the timestamp, with periods of a day and a week.
+While @limnet take advantage of the order of the interaction to propagate information in a causal way, it doesn't use the actual timestamps to compute the embeddings.
+One of our assumption was that this would lead to a loss of relevant information that could otherwise have been useful to predict the best item.
+In order to check that assumption, we created time features to provide the model with information about when the interaction happen.
+We specifically intended to capture cyclic patterns in the user behaviors such as week/weekend or day/night differences in behaviors.
+Unfortunately, our datasets only provide relative timestamps that obfuscated the exact time and day of the interactions, so we had to approximate these patterns by using a frequency decomposition of the timestamps.
+Specifically, we use the two following features:
+
+$ cos((2 pi) / Delta_"day" t), sin((2pi) / Delta_"day" t), cos((2 pi) / Delta_"week" t), sin((2pi) / Delta_"week" t) $
+Where $t$ is the timestamp of the interaction, and $Delta_"day"$ and $Delta_"week"$ are the duration of a day and a week in the unit of the timestamps.
+This aims at providing the model with a time representation that is more compatible with its machine learning components, that tend to fail to extract patterns from one dimensional values.
 
 === Normalization of the embeddings <m:normalize>
 
-This second improvement was inspired by the use of cosine similarity to evaluate the similarity between user and item's embeddings.
-cosine similarity only care about the angle between the embeddings.
-normalizing the embeddings to the unit sphere thus appeared as an efficient way not to converge to 0 while also focusing the model on meaningful transformations.
+An efficient way to compute the dot-product scores (@eq:dot-product-score) is to normalize all the embeddings to the unit sphere.
+While doing this, we realized that it could also be applied to the embeddings in @limnet's memory, this way, the cross-RNN mechanism is also fed with normalized embeddings as inputs.
+Our hopes were that this way the model would be more focus on encoding information through the angles between the embeddings rather than through their amplitudes.
+
+Another benefit of this method is that it prevents the embeddings to collapse to 0.
+While the regularization loss is meant to prevent embeddings to converge all to the same value, it actually only make sure that the embeddings are not aligned, therefore, 0 remains a potential convergence point.
+Keeping the embeddings normalized at any time is therefore a good solution to that issue.
+
+Our experiments yielded significantly better results with embeddings normalization, so we decided to use this modification by default for all the other experiments on @limnet.
 
 === Stacking several @limnet layers <m:stacking>
 
-Lastly we wanted to see whether @limnet could be turned into a deep neural network.
-Thus we tried the following architecture: *Schema needed*.
-we used leaky relu as activation layers
-Normalization is applied at every step.
+The last improvement to @limnet that we have tried was to stack several layers of the @limnet architecture on top of each other, effectively turning it into a deep recurrent neural network.
+@fig:multi-layer-limnet illustrate the architecture of this new model.
+The leaky ReLU functions inserted in the middle have been added to create non-linearity and increase the expressiveness of the model.
+
+#figure(
+  image("../../../../figures/limnet-multi-layer-architecture.svg"),
+  caption: "Architecture of " + gls("limnet") + "with two layers.",
+  placement: auto,
+) <fig:multi-layer-limnet>
 
 == Exploration of the baselines <m:baselines>
 
-We tried 2 baselines to compare with: static embeddings, and Jodie
-We also tried DeePRed but couldn't reproduce the results.
+We evaluated the performances of @limnet against 2 other baselines: static embeddings and Jodie.
 
-Static embeddings consist of learning a static representation for each node.
-Used as a simple baseline, but is oblivious to the temporal relationships.
-Hard to apply to a real world system: need to be re-trained to account for each new interaction.
+We trained static embeddings for each user and item, with the same loss functions that we described in @m:lossses for @limnet.
+This baseline is oblivious to the relational and temporal information contained in the data.
+It is also inconvenient to deploy for real world application because it requires to be entirely re-trained to account for any new information such as new interactions, new users, or new items.
 
-Jodie is conceptually close to LiMNet.
-Has x major differences:
-- Mixes dynamic embeddings with one-hot embeddings
-- Uses a projection mechanism to account for time elapsed between interactions
-- Uses a dedicated loss function
-Our implementation is truthful to the paper except for the batching algorithm.
-Jodie allows to dynamically account for new interactions in the network without re-training.
-Jodie is not designed for node insertions/deletions.
+The other baseline Jodie is described in @jodie, it is build upon the same core of cross-RNN embeddings than @limnet but present three major differences.
+First, in addition to the dynamic embedding, Jodie uses one-hot representations of the users and items to create the embeddings.
+Secondly, Jodie exploits the time delta between two interaction of an user throughout a projection operation that tries to anticipate the embeddings' trajectory.
+Lastly, the model is trained with a dedicated loss function that ensure that the embeddings won't change too radically through an interaction.
+The difference between our implementation of Jodie and the original one lie in the absence of the t-batch algorithm, replaced by fixed-length sequences.
+// Jodie allows to dynamically account for new interactions in the network without re-training.
+// Jodie is not designed for node insertions/deletions.
