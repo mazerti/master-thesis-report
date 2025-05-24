@@ -34,11 +34,11 @@
     long: "Continuous-Time Dynamic Graph",
     description: "Dynamic graph were each edge is associated with a timestamp.",
   ),
-  (
-    key: "tin",
-    short: "Temporal Interaction Network",
-    description: "Dynamic network were each interaction constitute a punctual edge, i.e. an edge with no duration.",
-  ),
+  // (
+  //   key: "tin",
+  //   short: "Temporal Interaction Network",
+  //   description: "Dynamic network were each interaction constitute a punctual edge, i.e. an edge with no duration.",
+  // ),
   // (
   //   key: "ac:deepred",
   //   short: "DeePRed",
