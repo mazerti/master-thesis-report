@@ -27,15 +27,44 @@ Given these promising results and that it is designed to exploit precisely the s
 
 == Problem <i:problem>
 
-The driving research question for this work is the following:
+While @limnet have shown significant success and potential, it has only been tested on the task of botnet detection on IoT networks, with some additional results available for the task of cryptocurrency fraud detection @limnet-finance-classification.
+Thus, the goal of this project is to apply and evaluate @limnet on interaction prediction tasks, in order to assess the capabilities of the architecture across a wider variety of problems.
+Furthermore, this project implements and evaluates adaptations and changes to the model's architecture, attempting to further enhance it's performances on the task of interaction prediction.
 
-#quote("Can" + gls("limnet") + "perform well for interaction prediction?")
+To summarize, the core research question for this work is the following:
 
-== Goals <i:goals>
+#quote("How will" + gls("limnet") + "perform on the task of interaction prediction?")
 
-== Delimitation <i:delimitation>
+This question follow two broader goals:
 
-== Contribution <i:contirbution>
++ Explore the range of applications of the @limnet model.
++ Help understand the success of state of the art interaction prediction models.
 
-== Ethics and Sustainability <i:ethics>
 
+== Delimitations <i:delimitations>
+
+This project focuses solely on predicting interactions for user-item networks.
+Thus, it does not cover tasks such as user/item label classification or link prediction between users or items separately.
+
+== Contributions <i:contirbutions>
+
+The contribution of this project are listed below:
+- We publish a framework for model evaluation on user-item interaction prediction task.
+- We present and evaluate @limnet, a new embedding model inspired from IoT botnet detection.
+- We propose and test modifications to this model targeted at improving performances for the specific task of user-item interaction prediction.
+- We reproduce and evaluate a state of the art model as a baseline.
+
+== Ethics and Sustainability <c:ethics>
+// move to conclusion
+
+
+The progress of Machine Learning applications, that allow to leverage big data sources at the expanse of large infrastructure costs, increases the risk of inequalities by increasing the power of bigger institutions.
+However, for this project that risk is mitigated thanks to three aspect of the @limnet architecture.
+First, the big selling points of this architecture are its scalability and lightweight aspect, both elements that participate to reduce the entry cost to run such model.
+Second, there is ongoing research to adapt this architecture into a decentralized and collaborative variant @metasoma.
+That variant may allow communities to leverage the model using distributed resources.
+Lastly, this project is public and thus easily accessible for legislators and law enforcers.
+There is an ever-increasing need to push the legislation on the use of new technologies, and to perform research to allow legislator to take informed decision about the subject that still contains a lot of unknowns.
+
+The reduced cost in computing is also subject to potential environmental impacts.
+It is still unclear, however, if increasing energy efficiency leads to an actual energy saving on the long run @rebound-effect-no-backfire.
