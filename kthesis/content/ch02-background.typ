@@ -11,27 +11,27 @@ Finally we present the model of interest for this work in @bg:limnet and why we 
 // The beginning of this section just got moved to @i:motivation, need to rethink it a bit.
 Content personalization can commonly be represented as a link-prediction problem in a user-item graph.
 In such a graph, each user and each item is associated to a node.
-An item can be any kind of information the user is interested in.
-It could be web pages, music tracks, items in an e-commerce catalog, and so on...
+An item can be any kind of information or content the user is interested in, such as web pages, music tracks, or items in an e-commerce catalog.
 For each interaction a user has with the system, it registers as an edge in the graph.
-The goal of the personalization system is to find which item is the most relevant for a given user, which is the same as predicting which interaction should be added next in the graph.
+The goal of the personalization system is to find which items are the most relevant for a given user at a given time, which is the same as predicting which interactions could be added next in the graph.
+Note that the relevance of an item is highly contextual, for example Christmas songs are very relevant around December and much less in July.
 
+Two different way to approach that problem are to use the graph analytics or to use features.
 // Why do we need the graph: provide an example, similar patterns
-A classical approach to that problem is to measure how close each item is to the user in the graph.
+By measuring how close each item is to the user in the graph through graph analytics methods, we get recommendations based on the user's past interactions and on the interactions users with similar history had.
 Research in graph theory has provided us with a range of different ways to compute closeness between two nodes, such as measuring the shortest path connecting them, how many neighbors they share or how exclusive their common neighbors are.
 
 // What features provide: similar users have similar patterns
-In addition of the relationship between users and items, most real-world system provide rich information about the nature of each interactions, users, and items.
-For example, in a music streaming service, an interaction can have a type (stream, like, playlist add, ...), as well as a listening duration.
-While each song can have information attached about its genres, its length, and for users, their age, and their location.
-All of this information is typically processed by Machine Learning systems that provide reliable results for numerical features.
-The challenge is then to meld traditional Machine Learning approaches for numerical features with graph-based methods for relational information.
+The other approach exploits additional information we get in addition of the relationship between users and items.
+Most real-world system provide rich information about the nature of each interactions, users, and items, for example, in a music streaming service, a song can have a length and a genre while a user can have an age.
+We call these information features and exploiting them is the core of Machine Learning.
+This approach, doesn't make suggestion based on the users past interactions but instead will suggest similar results to users with similar attributes.
 
-Lichtenwalter et al. proposed to approach link prediction as a supervised Machine Learning problem, instead of scoring each edge, they try, given an edge, to predict if it will exist in the future.
-To include the relational data to their model, they add some of the closeness metrics discussed earlier to the users and items features@new-perspectives-methods-link-prediction.
-This typical machine learning setup leads to switch from a straightforward prediction setting to a feature engineering approach when it comes to graph-based data.
+The challenge is then to meld both approaches.
+Lichtenwalter et al. proposed to approach link prediction as a supervised Machine Learning problem where the objective is to predict if an edge will exist in the future between a given pair of user and item.
+To include the relational data to their model, they add some of the closeness metrics from graph analytics to the users and items features@new-perspectives-methods-link-prediction.
+This setup invites to exploits the graph-based data not directly to predict the result but to build relevant features to enhance existing feature based solutions.
 Instead of looking for the desired property in the structure of the graph, this approach will try to summarize the structure into rich representation compatible with machine learning algorithm.
-The goal is not to proxy the desired property, but to create a rich representation of the graph data that can be used by a machine learning algorithm.
 
 All the previously mentioned methods presents one main drawback: each time a user want to be predicted an item, the score for each item regarding that user must be evaluated.
 This constraint makes it impossible to scale the solutions to large pools of items.
@@ -53,23 +53,9 @@ This spatial representation allow to reduce the problem to a nearest neighbor se
 == Graph Representation Learning <bg:grl>
 
 The task of learning high level representation from graph data is called Graph Representation Learning, abbreviated as #gls("grl", long: false).
-@grl is a general subject in data mining, it can be used to classify graph structures such as protein graphs, to capture information from a subgraph for example by creating subgraph representation from a knowledge graph to feed into a Large Language Model.
-More commonly, @grl tries to create embeddings for nodes in a graph.
+@grl is a broad family of machine learning approaches that capture the complex non-euclidian structure of graphs into low-dimensional euclidian representations (i.e. numerical vectors), enabling its use by downstream ML methods.
+It can be used to classify graph structures such as protein graphs, to capture information from a subgraph for example by creating subgraph representation from a knowledge graph to feed into a Large Language Model, and more commonly, to create embeddings for nodes in a graph.
 These embeddings must capture information about the node's features but also about the context of the node in the graph, which is typically defined as the neighboring nodes and their respective features and context.
-
-Two main approaches have emerged to create these embeddings, the first one is inspired by @nlp and the second one from Computer vision.
-The first approach creates random walks along the graph and assimilate each node to a token, and each random walk to a sentence or a sample of text.
-This way, any methods that produce word embeddings can also be used to create nodes embeddings.
-This method can even be used to create embeddings for paths or subgraphs.
-
-The second approach is inspired by convolutional networks used in computer vision.
-The idea is that convolutional networks see images as graphs of pixels and successively apply transformation to these pixels based on their direct neighborhood.
-Such operations can be applied similarly to general graphs, the main challenge being to accept neighborhood of varying size.
-These architectures are called @gnn and have proven very effective for @grl and link-prediction@a-comprehensive-survey-on-gnn.
-
-// - The task of learning embeddings from graphs is called GRL and have applications outside link-prediction: node-level, edge-level, graph-level (molecule graphs, ask gpt).
-// - Two approaches have been used so far: random walk based and GNNs. Random walk are used to create node sequences that are then fed to sequence based models of the same kind as Language models. GNNs are NN using the structure of the graphs to pass information through nodes.
-// (- Practical examples of GNNs in for link prediction: GraphSAGE)
 
 == Dynamic Graphs <bg:dynamic-graphs>
 
@@ -88,7 +74,7 @@ The first one considers a series of snapshot of the graph at successive timestam
 The second one, called @ctdg, records every edition to the graph as an event, associated with a timestamp.
 A typical event in a @ctdg is an edge addition or deletion.
 For this work, the focus is on @ctdg with all events being punctual interactions.
-We call such networks @tin:pl.
+We call such networks temporal interaction networks.
 These networks have the benefit to represent reality of a lot of system in a completely faithful way/*add example ?*/.
 However, the structure of the graph is blurry as each interaction corresponds to a point-in-time edge that is deleted as soon as it appears.
 Because of this, we tend to approach such graphs as a stream of interactions rather than a structured network.
