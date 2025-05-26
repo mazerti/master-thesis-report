@@ -55,7 +55,16 @@ First, we discuss in @r:improvements the measured performances of the proposed i
 Then, @r:jodie present the results yielded by our implementation of Jodie@jodie, and we discuss the differences we noticed with the initial publication.
 Lastly, @r:batching exhibits the impact of the batching strategy on the two models.
 
-== Effects of the proposed improvements for @limnet <r:improvements>
+== Effects of the proposed adaptations for @limnet <r:improvements>
+
+The first experiments we performed were designed to identify the best we could achieve using the @limnet model.
+Thus, we compared for each proposed adaptation of @limnet presented in @m:improvements the performances of the model with and without it to check whether it led to an actual improvement or not.
+
+=== normalization
+
+table
+
+removing the normalization reduces the performance significantly on all datasets, we thus recommend to always normalize the embeddings.
 
 === Time features
 
@@ -66,12 +75,6 @@ Wikipedia have the best performances with all time features, but only a slight i
 reddit have sensibly identical results on average but using both time features seem to yield more consistent results, while none produce much better results sometimes.
 on Lastfm using only time of day is best.
 note that on all datasets, the features never yield a significant improvements, and using only the time of the week always results in worst results.
-
-=== normalization
-
-table
-
-removing the normalization reduces the performance significantly on all datasets, we thus recommend to always normalize the embeddings.
 
 === Multiple layers
 
