@@ -32,7 +32,7 @@ Finally, we discuss in @m:baselines exploration we conducted with the baselines.
 == Datasets <m:datasets>
 
 We use three public datasets in this project, all directly taken from the Stanford Large Network Dataset Collection (accessible at #link("snap.stanford.edu/jodie/#datasets")).
-More specifically, these datasets were created by Kefato et al. in @jodie and have been reused a large number of times since then, to the extent that they have become de facto standard benchmarks for interaction network predictions.
+More specifically, these datasets were created by Kumar et al. in @jodie and have been reused a large number of times since then, to the extent that they have become de facto standard benchmarks for interaction network predictions.
 
 *- Wikipedia edits:*
 This dataset gathers edits on Wikipedia pages over the course of a month.
@@ -41,14 +41,14 @@ In total, the dataset records 157,474 edits.
 
 *- Reddit posts:*
 This dataset was built in a similar fashion to the Wikipedia dataset.
-It comprises posts on the 1,000 most active subreddits, published by the 10,000 most active users over the course of a month.
+It comprises posts on the 1,000 most active subreddits, published by the 10,000 most active users over the course of a month. /* Explain better posts/subreddits/etc. */
 In total, this dataset records 672,447 interactions.
 
-*- Reddit LastFM songs listens:*
+*- LastFM songs listens:*
 This dataset records music streams of the 1,000 most listened songs on the LastFM website.
 These streams are performed by 1,000 users throughout one month, and results in 1,293,103 total interactions.
 
-The initial publication also included another dataset compiling user interaction with massive online open courses (MOOC).
+The initial publication also included another dataset compiling user interaction with massive online open courses (MOOC). /* Could extend and "bash" the datasets and the uses of it, using a graph or other argument that would make it relevant. */
 However, we decided to set it aside because it contained too few data points to work with: only a couple interaction per users in average.
 
 #figure(
@@ -83,7 +83,7 @@ None of these approaches is inherently better or worse than the others and they 
 
 The implementation we came up with is publicly available on GitHub under the following link: #link("https://github.com/mazerti/link-prediction").
 
-In this section, we will precise the design decisions that led to our final evaluation framework.
+In this section, we will detail the design decisions that led to our final evaluation framework.
 We grouped these decisions into four categories: Preparation of the data, Batching strategy, Training and evaluation loops, and comparison of the embeddings.
 
 === Preparation of the data <m:inputs>
@@ -110,6 +110,8 @@ The idea is that big enough sequences could be good enough approximation of the 
 While each sequence still require to be processed in order, several sequences can however be processed in parallel, speeding up the training.
 
 === Training and evaluation loops <m:processing>
+
+/* Unclear, flowchart could help. */
 
 The on-demand feature preparation discussed in @m:inputs ensures that each model can access the inputs that it requires, unfortunately the models outputs also presents structural discrepancies.
 Since this work's scope is limited to embedding models, all model's outputs should be fixed size embeddings for either users or items, some models, though, come with their own loss functions based on internal states.
@@ -151,7 +153,7 @@ However, it is crucial to be able to reproduce experiments and to re-use existin
 Thus, this framework has been developed with the goal of being easy to understand and either build upon or reproduce.
 To reach this goal, two lines have been followed through the development process: thorough documentation and functional approach.
 The systematic documentations of every function in the framework should be able to help future researchers to understand the details of the implementation faster, whether it is for reusing it or to reproduce its behavior in a new experimental context.
-With the same goal of simplicity of understanding, the state have also been gathered as much as possible into a single location: the ```python Context``` class.
+With the same goal of simplicity of understanding, the state has also been gathered as much as possible into a single location: the ```python Context``` class.
 This class acts as a simple store for all stateful parts of the framework, making them never more than one variable away, wherever it is called from.
 In addition the framework has been written in a functional aspiring style, always favoring pure functions for their conceptual simplicity and consistency.
 Unfortunately this functional approach couldn't be applied on every part of the program, notable exceptions are the PyTorch modules that had to be implemented in an object oriented way to accommodate PyTorch's framework.
@@ -162,6 +164,8 @@ This work's primary goal was to test how the @limnet model would perform for the
 However, as discussed in @bg:limnet, the implementation we use is stripped down of it's inputs and outputs maps, as well as the response layer used in the original paper to fit the specific needs of the task of IoT botnet detection.
 
 === Loss functions <m:lossses>
+
+/* Better explanations about regularization loss, mention models lazyness, as a replacement to negative examples */
 
 We also had to adapt the loss used to train @limnet, because, unlike botnet detection, link-prediction isn't a classification setting, so we couldn't use cross entropy Loss as the original model did.
 Instead we decided to use a mix of two losses.

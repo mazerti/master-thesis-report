@@ -22,7 +22,7 @@ What sets this task apart from other self-supervised tasks is the relational asp
 In addition, interaction order and temporality usually play an important role in explaining the observed behaviors.
 
 @limnet @article:limnet is a simple Machine Learning model that is designed to process interactions in a causal way, leveraging both relational information and the interactions order.
-This model proved it's performance at solving the task of botnet detection in IoT network, and has been designed in a modular and adaptive way that makes it easy to employ for different tasks.
+This model proved its performance at solving the task of botnet detection in IoT network, and has been designed in a modular and adaptive way that makes it easy to employ for different tasks.
 Given these promising results and that it is designed to exploit precisely the specific information that makes interaction prediction challenging, we believe that @limnet can be an interesting solution to the interaction prediction task.
 
 == Problem <i:problem>
@@ -33,13 +33,13 @@ The core research question for this work is the following:
   #quote("How will" + gls("limnet") + "perform on the task of interaction prediction?")
 ]
 
-While @limnet have shown significant success and potential, it has only been tested on the task of botnet detection on IoT networks, with some additional results available for the task of cryptocurrency fraud detection @limnet-finance-classification.
+@limnet has shown significant success and potential, it has only been tested on the task of botnet detection on IoT networks, with some additional results available for the task of cryptocurrency fraud detection @limnet-finance-classification.
 Thus, the goal of this project is to apply and evaluate @limnet on interaction prediction tasks, in order to assess the capabilities of the architecture across a wider variety of problems.
 Answering that question would help us towards the two following goals:
 + Exploring the range of applications of the @limnet model.
 + Helping understand the success of state of the art interaction prediction models with similar architectures.
 
-In addition, this project implements and evaluates adaptations and changes to the model's architecture, attempting to further enhance it's performances on the task of interaction prediction, but also to explore further the space of possibilities opened by the design of @limnet.
+In addition, this project implements and evaluates adaptations and changes to the model's architecture, attempting to further enhance its performances on the task of interaction prediction, but also to explore further the space of possibilities opened by the design of @limnet.
 
 == Delimitations <i:delimitations>
 
