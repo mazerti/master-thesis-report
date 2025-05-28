@@ -55,18 +55,24 @@
     key: "lstm",
     short: "LSTM",
     long: "Long-Short Term Memory",
-    description: "A type of recurrent neural network designed to effectively learn and remember short and long-term dependencies in sequential data by using specialized memory cells and gating mechanisms."
+    description: "A type of recurrent neural network designed to effectively learn and remember short and long-term dependencies in sequential data by using specialized memory cells and gating mechanisms.",
   ),
   (
     key: "gru",
     short: "GRU",
     long: "Gated Recurrent Unit",
-    description: "A type of recurrent neural network that simplifies the LSTM architecture by combining the forget and input gates into a single update gate."
+    description: "A type of recurrent neural network that simplifies the LSTM architecture by combining the forget and input gates into a single update gate.",
   ),
   (
     key: "limnet",
     short: "LiMNet",
     long: "Lightweight Memory Networks",
-    description: "A neural network architecture that focuses on efficient memory utilization and lightweight design for temporal interaction network embeddings computations."
-  )
+    description: "A neural network architecture that focuses on efficient memory utilization and lightweight design for temporal interaction network embeddings computations.",
+  ),
+  (
+    key: "mrr",
+    short: "MRR",
+    long: "Mean Reciprocal Rank",
+    description: "Metric used to compute the success of a ranking algorithm. It is a value comprised between 0 and 1 where 0 indicates a total absence of the expected result in the ranked items and 1 mean that the expected item is always ranked first.",
+  ),
 )

@@ -1,110 +1,115 @@
-= Results
+= Experiments
 
-- Jodie is sensitive to the embedding size
-- Adding layers to LiMNet doesn't improve the performance for link prediction
-- Adding time features does not improve the performance
-- Jodie can perform much better (???)
-- Normalizing results seems to increase performances for LiMNet and Embeddings
+In this chapter we present the experiments performed throughout this project.
+The first section covers how we tried to improve on the core of the limnet model.
+// In @r:jodie we reproduce one of the experiments presented in @jodie.
+Then we evaluate the impact of the temporal information on the models.
 
-#table(
-  columns: (auto, 1fr, 1fr, 1fr, 1fr, 1fr, 1fr),
-  align: center,
-  table.header(
-    [Claim],
-    table.cell(colspan: 2)[Wikipedia],
-    table.cell(colspan: 2)[Reddit],
-    table.cell(colspan: 2)[Lastfm],
-  ),
+#figure(
+  image("../../../../figures/limnet-jodie.svg"),
+  caption: "Comparison of LiMNet and Jodie models.",
+  placement: auto
+) <fig:all-models>
 
-  [Changing embedding size Jodie], [$emptyset$], [$emptyset$], [$checkmark$], [$checkmark$], [$checkmark$], [],
-  [Adding layers LiMNet], [$checkmark$], [$checkmark$], [$checkmark$], [$checkmark$], [$checkmark$], [$checkmark$],
-  [Adding time features LiMNet],
-  [$checkmark$],
-  [$checkmark$],
-  [$checkmark$],
-  [$checkmark$],
-  [$checkmark$],
-  [$dash.wave$],
+To give some context, @fig:all-models shows the performance of the two models we tested, @limnet and Jodie.
+It stands clearly that Jodie is outperforming @limnet from a wide margin.
 
-  [Normalizing results LiMNet],
-  [$dash.wave$],
-  [$dash.wave$],
-  [$checkmark$],
-  [$checkmark$],
-  [$checkmark$],
-  [$checkmark$],
-)
+== Improvements on limnet
 
-- with little to no information the model is performing somewhat good
+Three different modifications have been tried with the hope to reduce the gap between @limnet and Jodie.
+The three following subsections presents these modifications and their experimental results.
 
-#line(length: 100%)
-#line(length: 100%)
+=== Adding time features
 
-Experiments to conduct:
-- Each model at its best
-- LiMNet with time features (none, both, day, week)
-- LiMNet without normalization (with/without)
-- LiMNet at several layers (1, 3, 5, 2)
-- Jodie at several embedding size (32, 64, 16, 48, 128)
-- Models with a small sequence length
+The most important specificity of the models tested lies in their ability to leverage temporal relationships between users and items.
+However, @limnet only exploits the order in which interactions happen, with no consideration for their exact time.
 
-// --- Start of actual writing ---
+This experiments tried to pass the exact interaction timestamps as features to the @limnet model to resolve this absence.
+More specifically, the features passed to the model seek to capture cyclic patterns in the interactions.
+Unfortunately, the datasets only provide relative timestamps that do not carry the precise time and day of the interactions.
+We thus approximated these patterns through a frequency decomposition of the following form:
 
-In this chapter, we present the results of the *$6$* experiments performed.
-First, we discuss in @r:improvements the measured performances of the proposed improvements on the @limnet architecture.
-Then, @r:jodie present the results yielded by our implementation of Jodie@jodie, and we discuss the differences we noticed with the initial publication.
-Lastly, @r:batching exhibits the impact of the batching strategy on the two models.
+$ cos((2 pi) / Delta t), sin((2pi) / Delta t) $
 
-== Effects of the proposed adaptations for @limnet <r:improvements>
+Where $t$ is the timestamp of the interaction, and $Delta$ is the duration of the pattern we want to capture (a day or a week) in the unit of the timestamps.
+Using cosine and sine is a trick that provide to the model easily comparable features compared to directly passing the timestamps as feature.
 
-The first experiments we performed were designed to identify the best we could achieve using the @limnet model.
-Thus, we compared for each proposed adaptation of @limnet presented in @m:improvements the performances of the model with and without it to check whether it led to an actual improvement or not.
+#figure(
+  image("../../../../figures/limnet-time-features.svg"),
+  placement: auto,
+  caption: "Performances of the LiMNet model with time features added.",
+) <fig:limnet-time-features>
 
-=== normalization
+@fig:limnet-time-features Shows the impact of these features on the measured @mrr.
+Adding features seem to reduce the variance of the model, but may have negative impact on the average results.
+In any case, it seems clear that the model struggle to deal with these additional features in a meaningful way.
+This experiment thus constitutes a case against using such features as a way to enhance the @limnet model for link-prediction.
 
-table
+=== Normalizing the embeddings
 
-removing the normalization reduces the performance significantly on all datasets, we thus recommend to always normalize the embeddings.
+Forcing the embeddings to lie on the unit pushes the model to encode information through the angle the embeddings forms with the space origin rather than through their amplitude.
+This is appropriate when optimizing the embeddings for the dot-product score @eq:dot-product-score.
+In this experiment, we tried to systematically normalize the embeddings after each interaction, this way not only the outputs but also the inputs of the cross-RNN are always normalized.
 
-=== Time features
+#figure(
+  image("../../../../figures/limnet-normalization.svg"),
+  placement: auto,
+  caption: "Performances of the LiMNet model with and without normalization of the embeddings.",
+) <fig:limnet-normalization>
 
-table
+As you can see in @fig:limnet-normalization, this modification yields significantly better results.
+Thus, we apply it by default to all the others experiment presented in this report.
 
-Adding time of day seem to provide slightly better results in average, but not every time.
-Wikipedia have the best performances with all time features, but only a slight improvement over only time of day or even none.
-reddit have sensibly identical results on average but using both time features seem to yield more consistent results, while none produce much better results sometimes.
-on Lastfm using only time of day is best.
-note that on all datasets, the features never yield a significant improvements, and using only the time of the week always results in worst results.
+=== Stacking layers
 
-=== Multiple layers
+This experiment tests whether stacking several layers of @limnet could improve its results.
+@fig:multi-layer-limnet illustrates the architecture of a stacked @limnet model.
+In between layers, Leaky ReLU units have been added to add non-linearity and expressiveness to the model.
 
-table
+#figure(
+  image("../../../../figures/limnet-layers.svg"),
+  placement: auto,
+  caption: "Performances of the LiMNet model with various number of stacked layers.",
+) <fig:limnet-layers>
 
-on wikipedia 1 layer is best the rest is equivalent
-on reddit 2/3 perform the best
-on lastfm 3/5 perform best
-never very significant but the more dense the dataset the more layer
+As shown in @fig:limnet-layers, stacking more than two layers doesn't prove to increase the model performance.
+An other observation that can be made is that changing from one layer to two have a positive impact on the more complex dataset but tend to decrease the performance of the model for the simpler Wikipedia dataset.
 
-== Comparison with Jodie <r:jodie>
+// == Comparing Jodie embeddings size <r:jodie>
 
-=== limnet vs jodie
+// Throughout the development, we witnessed an occurrence of Jodie performing surprisingly poorly with a small embedding size.
+// This observation contradicts with one of the experiment conducted by Kumar et al. in the paper where they present the model @jodie, that showed that the embedding dimension have no influence on the performances of the model.
+// This observation lead to the reproduction of the original experiment.
 
-table
+// #figure(
+//   image("../../../../figures/jodie-embeddings.svg"),
+//   placement: auto,
+//   caption: "Performances of the Jodie model with different embedding sizes.",
+// ) <fig:jodie-embeddings>
 
-jodie is always significantly better
+// The founding of this reproduction are summarized in @fig:jodie-embeddings.
+// They do confirm the original foundings in average.
+// However, the reproduction shows that at smaller embedding size the model can significantly underperform.
 
-=== embeddings size on jodie
+== Impact of the sequence size on the results
 
-as explained in the paper, embedding size doesn't matter
+The last experiment aims to understand the impact of the temporal and sequential information on the performance of the models.
+It was performed by training and evaluating the models with sequence lengths of 16, 64, 256 and 1024, so that the model would only have access to up to this many successive interactions to perform their prediction.
 
-=== jodie op ?
+#figure(
+  image("../../../../figures/sequence-length.svg"),
+  placement: auto,
+  caption: "Effect of the sequence length on the models performances.",
+) <fig:sequence-length-impact>
 
-wikipedia: 83% (~+10%)
-reddit: 98% (~+25%)
-lastfm: 83% (~+60%)
+The results displayed in @fig:sequence-length-impact show that both models perform, at best, as good with a bigger sequence length, which suggests a poor ability to exploit long term information.
+However, except for @limnet on Wikipedia, the sequence length seem to actually play only a marginal role in the performance of both models, which suggests that they may not even alleviate temporal information as they were designed for.
 
-differences with original paper:
--  batching strategy
-- 
+At the light of these observation, we made the assumption that the models may have learned over short terms global popularity patterns instead of long term local preferences.
+This behavior seem to make sense with regard to the nature of the datasets used where recent interactions by other users are likely to provoke new interaction from other users.
+In addition, all these datasets contain only the 1 000 most popular items over a period of a month.
+That could have lead to select mostly items whose popularity have spiked around given times during the month before going down again while the spotlight were turning towards other items.
 
-== Effect of the batching strategy <r:batching>
+Such a hypothesis could explain why our implementation of Jodie is reaching up to 60% higher @mrr on LastFM compared with the original implementation.
+The main difference between our implementation and the one presented in the paper is the batching algorithm, in this project interactions are processed in chronological order, while in @jodie they are processed following the t-batch algorithm.
+The t-batch algorithm groups interactions with common item or users together, leading to a more localized information sharing mechanism.
