@@ -8,7 +8,7 @@ The rapid expansion of digital technologies has produced an overwhelming abundan
 Thus, search engines and recommendation systems have become essential tools to alleviate this information overload and leverage the large pools of data.
 These two tools share one common goal: filtering information.
 Among the many techniques that have emerged to tackle this task, content personalization has emerged as a significant factor.
-Instead of filtering the information in the same way for everyone, the systems will use the user's context (i.e. search history, demographics, past interactions with the system, etc.) to filter the information to display.
+Instead of filtering the information in the same way for everyone, the systems will use the user's context, e.g. search history, demographics, and past interactions with the system, to filter the information to display.
 Content personalization is the core of recommendation systems, but it is also very efficient for search engines.
 For example, the search for the term "football" should yield different results for a user interested in American football and a user interested in association football (soccer).
 
