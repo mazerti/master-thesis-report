@@ -2,7 +2,6 @@
 = Method
 
 /*
-
 This chapter is about Engineering-related content, Methodologies, and Methods.
 Use a self-explaining title.
 The contents and structure of this chapter will change with your choice of methodology and methods.
@@ -18,10 +17,7 @@ The choices should also reflect your goals and what you (or someone else) should
 How will you know if your results are valid?
 Remember that validity is about the accuracy of a measurement while reliability is about the consistency of the measurement values under t
 he same conditions (i.e., repeatability).
-
 */
-
-// --- Start of actual writing ---
 
 In this chapter, we detail the experiments conducted throughout this work.
 First in @m:datasets, we introduce the datasets used in this work.
@@ -41,15 +37,17 @@ In total, the dataset records 157,474 edits.
 
 *- Reddit posts:*
 This dataset was built similarly to the Wikipedia dataset.
-It comprises posts on the 1,000 most active subreddits, published by the 10,000 most active users over the course of a month. /* Explain better posts/subreddits/etc. */
+The interactions on this dataset are 672,447 posts published by the 10,000 most active users on the 1,000 most active subreddits, over the course of a month.
 In total, this dataset records 672,447 interactions.
 
 *- LastFM songs listens:*
 This dataset records music streams of the 1,000 most listened to songs on the LastFM website.
 These streams are performed by 1,000 users throughout one month and result in 1,293,103 total interactions.
 
-The initial publication also included another dataset compiling user interaction with massive open online courses (MOOCs). /* Could extend and "bash" the datasets and the uses of it, using a graph or other argument that would make it relevant. */
-However, we decided to set it aside because it contained too few data points to work with: only a couple of interactions per user on average.
+The initial publication also included another dataset compiling user interaction with massive open online courses (MOOCs).
+This dataset records interaction events performed by 7,047 students on 97 courses.
+/* Could extend and "bash" the datasets and the uses of it, using a graph or other argument that would make it relevant. */
+However, we decided to set it aside because we considered that it doesn't constitute a relevant use case for interaction prediction, as we expect users connecting to MOOC platform to already know on which course to work on.
 
 #figure(
   table(

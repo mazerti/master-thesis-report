@@ -12,7 +12,7 @@ Then we evaluate the impact of the temporal information on the models.
 ) <fig:all-models>
 
 To give some context, @fig:all-models shows the performance of the two models we tested, @limnet and Jodie.
-It stands clearly that Jodie is outperforming @limnet by a wide margin.
+It stands clearly that Jodie is outperforming @limnet by a wide margin, regardless of the dataset used.
 
 == Improvements on limnet
 
