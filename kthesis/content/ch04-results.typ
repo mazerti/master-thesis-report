@@ -91,7 +91,7 @@ An other observation that can be made is that changing from one layer to two hav
 // They do confirm the original foundings in average.
 // However, the reproduction shows that at smaller embedding size the model can significantly underperform.
 
-== Impact of the sequence size on the results
+== Impact of the sequence size on the results <ex:sequence-length>
 
 The last experiment aims to understand the impact of the temporal and sequential information on the performance of the models.
 It was performed by training and evaluating the models with sequence lengths of 16, 64, 256 and 1024, so that the model would only have access to up to this many successive interactions to perform their prediction.

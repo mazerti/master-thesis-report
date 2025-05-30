@@ -148,6 +148,7 @@
 #include "./content/ch02-background.typ"
 #include "./content/ch03-method.typ"
 #include "./content/ch04-results.typ"
+#include "./content/ch0X-conclusion.typ"
 
 #bibliography("../../../bibliography.bib", title: "References")
 

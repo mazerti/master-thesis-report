@@ -30,7 +30,7 @@ Given these promising results and that it is designed to exploit precisely the s
 The core research question for this work is the following:
 
 #align(center)[
-  #quote("How will" + gls("limnet") + "perform on the task of interaction prediction?")
+  #quote("How will" + gls("limnet") + "perform on the task of interaction prediction on a user-item network?")
 ]
 
 @limnet has shown significant success and potential, it has only been tested on the task of botnet detection on IoT networks, with some additional results available for the task of cryptocurrency fraud detection @limnet-finance-classification.
