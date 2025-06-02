@@ -34,5 +34,20 @@ Therefore, it would be very beneficial to try the models tested in this study on
 The other interesting gap we suggest to explore is the difference between the performances of the @limnet model and the Jodie one, since both models share the same core, it is surprising to witness such a big difference in their capabilities.
 Exploring the design space that separates this models through an ablation study of the components of Jodie could bring more insight on which architectural decision generates such a performance leap.
 
-== Reflections
+// == Reflections
 /* What are the relevant economic, social, environmental, and ethical aspects of your work? */
+
+== Ethics and Sustainability <c:ethics>
+// move to conclusion
+
+
+The progress of Machine Learning applications, which allows for leveraging big data sources at the expense of large infrastructure costs, increases the risk of inequalities by increasing the power given to the biggest institutions.
+However, for this project, that risk is mitigated thanks to three aspects of the @limnet architecture.
+Firstly, the big selling points of this architecture are its scalability and lightweight aspect, both elements that contribute to reduce the entry cost to run such a model.
+Secondly, there is ongoing research to adapt this architecture into a decentralized and collaborative variant @metasoma.
+That variant may allow communities to leverage the model using distributed resources.
+Lastly, this project is public and thus easily accessible for legislators and law enforcers.
+There is an ever-increasing need to push the legislation on the use of new technologies, and research allowing legislators to take informed decisions about these subjects that still contain a lot of unknowns is valuable.
+
+The reduced cost of computing power is also subject to potential environmental impacts.
+It is, however, still unclear if increasing energy efficiency leads to an actual energy saving in the long run @rebound-effect-no-backfire.
