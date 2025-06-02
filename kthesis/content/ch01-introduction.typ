@@ -4,32 +4,33 @@
 
 == Purpose/Motivation <i:motivation> /* Can't keep that title */
 
-The rapid expansion of digital technologies has produced an overwhelming abundance of information, making it challenging to find relevant and meaningful material among the multitude.
-Thus, search engines and recommendation systems have become essential tools to alleviate this information overload and leverage the large pools of data.
-These two tools share one common goal: filtering information.
-Among the many techniques that have been researched to tackle this task, content personalization has emerged as a significant factor.
-Instead of filtering the information in the same way for everyone, the systems will use the user's context, e.g. search history, demographics, and past interactions with the system, to filter the information to display.
-Content personalization is the core of recommendation systems, but it is also very efficient for search engines.
-For example, the search for the term "football" should yield different results for a user interested in American football and a user interested in association football (soccer).
+The rapid expansion of digital technologies has led to an overwhelming abundance of information, making it increasingly difficult to identify relevant and meaningful content.
+In response to this challenge, search engines and recommendation systems have become essential tools for filtering and navigating vast data landscapes.
 
-Content personalization can be represented as a single algorithm that accepts as input user-related information and outputs a ranked list of items from a catalog.
-Items could be any piece of information that is available to the user among a large selection, such as songs in a streaming catalog, or web pages.
-In order to measure the performance of such an algorithm, we need to know which items would be relevant for each user.
-Gathering this information is costly, and sometimes even impossible.
-However, it is easy to collect user behaviors such as interaction with items, thus, content recommendation is commonly approximated to an interaction prediction task.
+Both systems share a common objective: to deliver information that is most relevant to the user.
+Content personalization has emerged as a particularly effective approach among the many techniques developed to achieve this.
+Rather than applying a one-size-fits-all filter, personalized systems adapt their output based on user-specific context such as search history, demographics, and past interactions.
 
-Interaction prediction is a self-supervised learning task where interactions are used as labels to predict, before being given as inputs to predict future interactions.
-What sets this task apart from other self-supervised tasks is the relational aspect of the information used; each interaction explicitly connects information with other interactions and elements at play (such as users or items).
-Thus, we commonly refers to user-items networks to refer to a set of interactions so that the relational aspect of it is stressed.
-In addition, the order of the interactions and their temporality usually play an important role in explaining the observed behaviors.
+Content personalization lies at the heart of recommendation systems and is highly effective in enhancing search engine performance.
+For instance, a search query for the term "football" should yield different results for a user interested in American football compared to someone seeking information about association football (soccer).
 
-We will focus in this project on the case of user-item interaction networks, that is interaction systems where all interactions occur between a user and an item where users are distinct from items.
-In this setting, interactions are inherently asymmetrical; users are causing the interactions while items are available to be interacted with by any users.
+Content personalization can be represented as an algorithm that takes user-specific information as input and produces a ranked list of items from a larger catalog.
+These items can include any kind of content available to the user, such as songs in a music streaming service or web pages returned by a search engine.
 
+Evaluating the performance of such algorithms typically requires knowledge of which items are genuinely relevant to each user.
+However, obtaining this information can be costly and, in some cases, unfeasible.
+On the other hand, user behaviors—such as clicks, listens, or edits—are easy to collect at scale.
+As a result, content recommendation is often approximated as an interaction prediction task, where the goal is to predict future user-item interactions based on past behavior.
 
-@limnet @article:limnet is a simple Machine Learning model that is designed to process interactions in a causal way, leveraging both relational information and the order of the interactions.
-This model proved its performance at solving the task of botnet detection in IoT networks, and has been designed in a modular and adaptive way that makes it easy to employ for different tasks.
-Given these promising results and that it is designed to exploit precisely the specific information that makes interaction prediction challenging, we believe that @limnet can be an interesting solution to the interaction prediction task.
+Interaction prediction is a self-supervised learning task in which past user-item interactions serve first as labels and later as input features used to predict future interactions.
+Unlike other self-supervised tasks, it is distinguished by the inherently relational nature of the data: each interaction connects users and items, forming a web of dependencies that influence future behavior.
+
+As a result, these interactions are often modeled as user-item networks to highlight the structural relationships between entities.
+Besides, the temporal dimension—including the order and timing of interactions—typically plays a critical role in accurately modeling and understanding user behavior over time.
+
+@limnet @article:limnet is a simple machine learning model designed to process user-item interactions in a causal manner, leveraging both relational information and the order of interactions.
+The model has demonstrated strong performance in tasks such as botnet detection in IoT networks, and it is built in a modular, adaptive way that makes it easy to apply to other problems.
+Given these promising characteristics and its ability to exploit precisely the types of information that make interaction prediction challenging, @limnet appears to be a compelling candidate for this task.
 
 == Problem <i:problem>
 
