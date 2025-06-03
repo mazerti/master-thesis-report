@@ -37,29 +37,36 @@ Given these promising characteristics and its ability to exploit precisely the t
 The core research question for this work is the following:
 
 #align(center)[
-  #quote("Does LiMNet has the potential to compete against state of the art models on the task of interaction prediction for user-item network?")
+  #quote("Does LiMNet have the potential to compete against state-of-the-art models on the task of interaction prediction for user-item network?")
 ]
 
-@limnet has shown significant success and potential, yet, it has only been tested on the task of botnet detection on IoT networks @article:limnet, with some additional results available for the task of cryptocurrency fraud detection @limnet-finance-classification.
-Thus, the goal of this project is to apply and evaluate @limnet on interaction prediction tasks, to assess the capabilities of the architecture across a wider variety of problems.
-Answering that question would help us towards the following two goals:
-first, to explore the range of applications of the @limnet model, and second, to help understand the success of state-of-the-art interaction prediction models with similar architectures.
+@limnet has shown significant promise, yet its evaluation has been limited to botnet detection in IoT networks @article:limnet, with some additional results available for cryptocurrency fraud detection @limnet-finance-classification.
+This project aims to apply and assess @limnet in the context of interaction prediction, thereby evaluating the model's generalizability across a broader range of tasks.
+Addressing this research question supports two main goals: first, to explore the applicability of the @limnet architecture to diverse domains, and second, to better understand the characteristics that drive the success of similar state-of-the-art interaction prediction models.
 
-To answer this question, we need to develop an evaluation framework that would support different models while ensuring the fairness of the measures.
-In addition, this project implements and evaluates adaptations and changes to the model's architecture, attempting to further enhance its performance on the task of interaction prediction, but also to explore further the space of possibilities opened by the design of @limnet.
+To this end, we develop a flexible evaluation framework supporting multiple models while ensuring fair and consistent comparisons.
+Additionally, we implement and evaluate several architectural adaptations to @limnet, aiming not only to improve its performance on interaction prediction but also to further investigate the design space enabled by its modular structure.
 
-== Delimitations <i:delimitations>
-// Expand this section a bit ?
+== Limitations <i:delimitations>
 
-This project focuses solely on predicting interactions for user-item networks.
-Thus, it does not cover tasks such as user/item label classification or link prediction between users or items separately.
+One alternative approach to interaction prediction involves building a classifier to determine whether a given user is likely to interact with a specific item.
+This approach is excluded from the present work, which instead focuses on computing embeddings and generating ranked item lists.
 
-#v(1cm)
+Another limitation of this study is its strict focus on user-item networks.
+Interactions between entities of the same type, such as user-user or item-item connections, are not considered.
+For instance, tasks like friendship prediction on a social network fall outside the scope of this project.
+Consequently, each entity is strictly classified as either a user or an item, with no allowance for hybrid or hierarchical roles.
+And only one kind of interaction is considered, e.g. user listening to a song but not artist posting a song.
+
+Furthermore, this work considers only punctual interactions—discrete events occurring at specific points in time.
+Continuous interactions are excluded, and due to data limitations, the duration of interactions is not modeled.
+Although interaction durations could offer meaningful insights into engagement or relevance, they remain outside the scope of this thesis.
+
 == Contributions <i:contributions>
 
-Here follows the list of the contributions of this project:
-- We publish a framework for model evaluation on the user-item interaction prediction task.
-- We present and evaluate @limnet, a new embedding model taken from IoT botnet detection. The evaluation showed that this model is not able to match the current baselines.
-- We propose and test modifications to this model targeted at improving performance for the specific task of user-item interaction prediction.
-- We reproduce and evaluate Jodie, a state-of-the-art model, as a baseline. We witnessed better results than we expected.
-- We realized that the datasets used may present a structural bias towards global trends rather than elaborate long term mechanisms.
+The main contributions of this project are as follows:
+- Development and publication of a framework for evaluating models on the user-item interaction prediction task.
+- Presentation and evaluation of LiMNet, an embedding model originally proposed for IoT botnet detection. Our evaluation shows that, in its current form, LiMNet does not match the performance of state-of-the-art baselines.
+- Proposal and testing of architectural modifications to LiMNet aimed at improving its performance in the context of user-item interaction prediction.
+- Reproduction and evaluation of Jodie, a state-of-the-art model for temporal interaction prediction. Interestingly, our implementation produced results that exceeded expectations.
+- Identification of a possible structural bias in the benchmark datasets, suggesting they may favor global popularity trends over more complex, long-term behavioral patterns.

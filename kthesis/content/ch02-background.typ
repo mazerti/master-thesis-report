@@ -9,125 +9,133 @@ Finally, we present the model of interest for this work in @bg:limnet and why we
 
 == User-Item Link Prediction <bg:link-prediction>
 
-// The beginning of this section just got moved to @i:motivation, need to rethink it a bit.
 
-Content personalization can commonly be represented as a link-prediction problem in a user-item graph.
-In such a graph, each user and each item is associated with a node.
-An item can be any kind of information or content the user is interested in, such as web pages, music tracks, or items in an e-commerce catalog.
-For each interaction a user has with the system, it registers as an edge in the graph.
-The goal of the personalization system is to find which items are the most relevant for a given user at a given time, which is the same as predicting which interactions could be added next in the graph.
-Note that the relevance of an item is highly contextual; for example, Christmas songs are very relevant around December and much less in July.
+Interaction prediction can often be formulated as a link prediction problem within a user-item graph.
+In such a graph, each user and each item is represented as a node.
+Each user interaction with an item is registered as an edge in the graph.
+Predicting future interactions comes down to predicting which edges are likely to appear next.
 
-Two different ways to approach that problem are to use graph analytics, or to use features.
-By measuring how close each item is to the user in the graph through graph analytics methods, we get recommendations based on the user's past interactions, and on the interactions users with a similar history had.
-For example, if two users listened to the same songs, there is a higher chance that the second user will also like the other songs that the first user likes.
-Research in graph theory has provided us with a range of different ways to compute closeness between two nodes, such as measuring the shortest path connecting them, how many neighbors they share, or how exclusive their common neighbors are.
+In this project, we focus specifically on user-item interaction networks—systems in which all interactions occur between distinct user and item entities.
+Users and items play fundamentally different roles: users initiate interactions, while items are the targets.
+This introduces a structural asymmetry in the network, where interactions are always directed from a user to an item.
+In practice, this means that prediction tasks are framed from the user's perspective, with the goal of identifying the most relevant items they are likely to interact with next.
 
-The other approach exploits additional information we get in addition to the relationship between users and items.
-Most real-world systems provide rich information about the nature of each interaction, users, and items.
-For example, in a music streaming service, a song can have a length and a genre, while a user can have an age.
-We call these information features, and exploiting them is the core of Machine Learning.
-This approach doesn't make suggestions based on the users' past interactions but instead will suggest similar results to users with similar attributes.
-To continue on the music streaming service example, we could identify relationships between the different populations of users and items, such as audience of young parents being more likely to be interested in nursery rhymes than teenagers.
+There are two primary approaches to this problem: one based on graph analytics and the other on feature-based methods.
+Graph analytics focuses on measuring the proximity between a user and various items in the graph, leveraging insights from the user's past interactions and the behaviors of similar users.
+For instance, if two users have listened to the same set of songs, one may likely enjoy the songs the other has listened to.
+Graph theory offers a variety of methods to compute closeness between nodes, including shortest path lengths, the number of shared neighbors, or the exclusivity of those shared neighbors.
 
-The challenge is then to meld both approaches.
-Lichtenwalter et al. proposed to approach link prediction as a supervised Machine Learning problem where the objective is to predict if an edge will exist in the future between a given pair of user and item.
-To include the relational data in their model, they add some of the closeness metrics from graph analytics to the users and items features@new-perspectives-methods-link-prediction.
-This setup invites to exploit the graph-based data not directly to predict the result but to build relevant features to enhance existing feature-based solutions.
-Instead of looking for the desired property in the structure of the graph, this approach will try to summarize the structure into rich representations compatible with machine learning algorithms.
+The second approach leverages additional information beyond the user-item relationship.
+Most real-world systems provide rich metadata about interactions, users, and items.
+For example, in a music streaming service, a song may include attributes like genre and duration, while a user may be characterized by age or selected language.
+These attributes are referred to as features, and utilizing them is central to machine learning approaches.
+Unlike graph-based methods, feature-based models recommend items by identifying similar users based on shared characteristics.
+Continuing the music example, the system might learn that songs with lyrics in Swedish are less likely to appeal to users that don't use Swedish as their primary language.
 
-All the previously mentioned methods present one main drawback: each time a user wants to be predicted an item, the score for each item regarding that user must be evaluated.
-This constraint makes it impossible to scale the solutions to large pools of items.
-To limit the number of comparisons, a solution is to create a high-dimensional representation of the users and items separately and use simple proximity functions on these embeddings as a scoring function.
-This spatial representation allows to reduce the problem to a nearest neighbor search for which scalable solutions have been found.
+The challenge lies in integrating both approaches.
+Lichtenwalter et al. proposed framing link prediction as a supervised machine learning task, where the objective is to predict whether an edge will form between a given user-item pair in the future.
+To incorporate relational data into the model, graph closeness metrics are added to the user and item features@new-perspectives-methods-link-prediction.
+This setup uses graph structure not as the direct basis for prediction but as a source of enriched features, enabling machine learning algorithms to work with abstracted representations of the graph.
+
+Despite their strengths, these methods share a common drawback: for each user, a score must be computed for every possible item to generate a recommendation.
+This becomes computationally infeasible when dealing with large item catalogs.
+A common solution is to learn high-dimensional embeddings for users and items separately and then compute a similarity score, such as a dot product or distance measure, to rank items.
+This transforms the problem into a nearest-neighbor search, a well-studied task with many efficient and scalable solutions.
 
 == Graph Representation Learning <bg:grl>
 
-The task of learning high-level representation from graph data is called Graph Representation Learning, abbreviated as #gls("grl", long: false).
-@grl is a broad family of machine learning approaches that capture the complex non-Euclidean structure of graphs into low-dimensional Euclidean representations (i.e., numerical vectors), enabling its use by downstream ML methods.
-It can be used to classify graph structures such as protein graphs, to capture information from a subgraph, for example, by creating subgraph representations from knowledge graphs to feed into Large Language Models, and more commonly, to create embeddings for nodes in a graph.
-These embeddings must capture information about the node's features but also about the context of the node in the graph, which is typically defined as the neighboring nodes and their respective features and context.
+The task of learning high-level representations from graph data is known as @grl.
+@grl encompasses a broad family of machine learning techniques aimed at transforming the complex, non-Euclidean structure of graphs into low-dimensional Euclidean representations (i.e., numerical vectors), making them suitable for use in downstream machine learning tasks.
+
+@grl methods can be applied to a wide range of problems.
+These include classifying entire graph structures, such as molecular graphs; extracting subgraph representations from knowledge graphs to be used in large language models; and, most commonly, generating node embeddings.
+These node embeddings must encode not only the intrinsic features of individual nodes but also the context in which they appear.
+This context typically includes neighboring nodes and their corresponding features and positions within the graph.
 
 == Dynamic Graphs <bg:dynamic-graphs>
 
-Most of the information we get from networks is dynamic, especially for user-item interaction networks, where each interaction usually happens at a given time.
-Yet, when dealing with relational data, this temporal dimension is often disregarded to limit the complexity of the problem or simplified as a mere feature of the interaction.
-However, temporal data constitute a unique kind of information, allowing for the exploitation of the causal relationships between the different interactions.
+Much of the information generated in real-world networks is inherently dynamic, particularly in user-item interaction networks, where each interaction occurs at a specific point in time.
+Despite this, the temporal dimension is often ignored or simplified in order to reduce modeling complexity.
+Yet, temporal information carries unique value, enabling models to capture not just patterns but also the causal relationships between interactions.
 
-Causality is the idea that causes will have consequences in the future.
-It becomes especially critical when studying phenomena that can spread through the networks, such as diseases, information, or trends.
-In such settings, each interaction can be the cause for a new state in the interacting nodes, requiring a different treatment for the same node at different times.
-While this concept is very intuitive for us, it is not the case for common @grl techniques described in @bg:grl that let the information spread along the graph regardless of the order in which they are created.
+Causality refers to the principle that actions can influence future outcomes.
+This is especially important when studying processes that propagate through networks, such as the spread of information, trends, or behaviors.
+In these scenarios, an interaction may change the state of the involved nodes, making it necessary to treat the same node differently depending on the time of observation.
+While humans intuitively understand these evolving patterns, many standard @grl techniques disregard temporal order, propagating information across the graph without regard to when interactions occurred.
 
-In their review of dynamic network@survey-dynamic-gnn, Zheng et al. explain two ways temporal information is commonly included into graph data.
-The first one considers a series of snapshots of the graph at successive timestamps.
-The second one, called @ctdg, records every edition to the graph as an event, associated with a timestamp.
-A typical event in a @ctdg is an edge addition or deletion.
-For this work, the focus is on @ctdg with all events being punctual interactions.
-We call such networks temporal interaction networks.
-These networks have the benefit of representing the reality of a lot of systems in a completely faithful way because they continuously account for the new modifications.
-However, the structure of the graph is blurry as each interaction corresponds to a point-in-time edge that is deleted as soon as it appears.
-Because of this, we tend to approach such graphs as a stream of interactions rather than a structured network.
+In their review of dynamic networks @survey-dynamic-gnn, Zheng et al. outline two common approaches to incorporating temporal information into two models.
+The first involves representing the graph as a sequence of discrete snapshots, each corresponding to a specific time step.
+The second, known as @ctdg, treats each graph update as an event timestamped in continuous time, typically the addition or removal of an edge.
 
-A popular approach to leverage temporal data when creating node embeddings is to maintain a memory of the embeddings and update them as interactions are read.
-One of the building blocks for this approach is DeepCoevolve @deepcoevolve, a model for link prediction that uses two components: a cross-RNN (detailed further in @bg:cross-rnn) to update the representation of the users and items, followed by an intensity function to predict the best match for the user at every given time $t$.
-Following DeepCoevolve, other cross-RNN models have been proposed with notable performance upgrades.
+This work focuses on @ctdg, where all events are modeled as punctual interactions, also referred to as temporal interaction networks.
+These networks offer a faithful representation of many real-world systems, as they continuously track changes over time.
+However, they come with a challenge: the underlying graph structure becomes ephemeral, with each edge appearing only momentarily.
+As a result, these networks are often better understood as interaction streams rather than static or evolving graphs with persistent edges.
 
-JODIE @jodie builds upon DeepCoevolve by adding a static embedding component to the representation, using the Cross-RNN part to track the users' and items' trajectories.
-It then employs a neural network layer to project the future embedding of each node at varying times, an operation that replaces the intensity function in DeepCoevolve.
+A popular approach for leveraging temporal data when generating node embeddings is to maintain a memory of embeddings and update them as interactions occur.
+One foundational model in this domain is DeepCoevolve @deepcoevolve, a model for link prediction that uses two components: a cross-RNN (further detailed in @bg:cross-rnn) to update user and item representations, and an intensity function to predict the likelihood of future interactions at any given time.
+Following DeepCoevolve, several cross-RNN-based models have been proposed, achieving notable performance improvements.
 
-DeePRed @deepred is another approach building on top of DeepCoevolve, this time with the aim to accelerate and simplify the training by getting rid of the recurrence in the cross-RNN mechanism.
-To achieve this, the dynamic embeddings are computed based on static embeddings, effectively getting rid of the recurrence by never reusing the dynamic embeddings for further computations.
-The lack of long-term information passing is compensated by the use of a sliding context window coupled with an attention mechanism to best identify the meaningful interactions.
+JODIE @jodie extends DeepCoevolve by introducing a static embedding component alongside the dynamic one.
+The cross-RNN tracks the trajectory of users and items over time, while a neural projection layer predicts their future embeddings at different time steps, replacing the intensity function used in DeepCoevolve.
+
+DeePRed @deepred builds upon DeepCoevolve with the goal of simplifying and accelerating training by removing recurrence from the cross-RNN mechanism.
+Instead, dynamic embeddings are computed directly from static embeddings, avoiding recursive updates.
+The absence of long-term memory is addressed through the use of a sliding context window and an attention mechanism that identifies and weights the most relevant past interactions.
 
 == Cross-RNN <bg:cross-rnn>
 
-The key mechanism for all the aforementioned models is called cross-RNN, where RNN stands for Recurrent Neural Network.
-A #gls("rnn", long: false) is a neural network with the specificity of processing sequential data, passing an internal memory embedding between each step of the sequence of inputs.
-Formally, a @rnn layer is defined as
+The key mechanism underlying the models discussed in the previous section is known as cross-RNN, where #gls("rnn", long: false) stands for Recurrent Neural Network.
+A @rnn is a type of neural network designed to process sequential data by maintaining and updating a memory state across time steps.
+Formally, a @rnn layer is defined as:
+
 $ bold(o)(bold(i)_t) = f(bold(i)_t, bold(h)_(t-1)) $
 $ bold(h)_t = g(bold(i)_t, bold(h)_(t-1)) $ <rnn:memory-update>
-Where $t$ stands for the time step of the input $bold(i)_t$. $bold(o)(bold(i)_t)$ marks the output of the layer and $bold(h)_t$ represent the memory of the layer after receiving the input $bold(i)_t$.
-The functions $f$ and $g$ can vary depending on the nature of the @rnn, but they will rely on weights, tuned during the model training.
-Popular @rnn architectures try to keep a memory of long-term knowledge.
-Typically, the @lstm architecture maintains two distinct memories, a short-term one and a long-term one.
-The @gru architecture iterates over @lstm by simplifying it, removing one of the two memories while keeping the gating mechanism.
-In practice, both approaches perform significantly better than the naïve @rnn implementation, with @gru achieving comparable performances to @lstm, in spite of its reduced cost.
 
-A Cross-RNN layer is slightly different.
-Instead of keeping track of a single memory embedding $bold(h)_t$, it maintain a memory for all nodes in the graph $bold(H)_t = (bold(h)_t^u)_(u in UU) union (bold(h)_t^i)_(i in II)$, where $UU$ and $II$ are the sets of users and items in the graph.
-For each interaction $(u,i,t,bold(f))$ the memory is updated as follow:
+Here, $t$ denotes the time step of the input $bold(i)_t$.
+The function $bold(o)(bold(i)_t)$ produces the layer's output, and $bold(h)_t$ represents the updated memory after processing $bold(i)_t$.
+The functions $f$ and $g$ are parameterized transformations, typically involving learned weights.
+Popular @rnn architectures, such as @lstm and @gru, are designed to retain long-term dependencies more effectively than simple @rnn:pl.
+@lstm maintains two types of memory (short-term and long-term), whereas @gru simplifies this structure by using a single memory vector with a gating mechanism.
+In practice, @gru:pl achieve performance comparable to @lstm:pl while being computationally less demanding @gated-recurrent-nn-on-sequence-modelling.
+
+A cross-RNN layer extends this concept by maintaining separate memory states for all nodes in a graph.
+At time $t$, the memory is represented as:
+$bold(H)_t = (bold(h)_t^u)_(u in UU) union (bold(h)_t^i)_(i in II)$
+where $UU$ and $II$ denote the sets of users and items, respectively.
+For each interaction $(u,i,t,bold(f))$, the memory states of the involved user $u$ and item $i$ are updated according to:
+
 $ bold(h)_t^u = g^u (bold(h)_(t-1)^u, bold(h)_(t-1)^i, t, bold(f)) $
 $ bold(h)_t^i = g^i (bold(h)_(t-1)^i, bold(h)_(t-1)^u, t, bold(f)) $
-And for all other users and nodes, the memory is carried over.
-$
-  bold(h)_t^v = bold(h)_(t-1)^v wide forall v in UU \\ {u} union II \\ {i}
-$
-Where $u$ is the user interacting with item $i$ at time $t$ with feature $bold(f)$, and $g^u$ and $g^i$ are tunable functions, comparable to the function $g$ in @rnn:memory-update.
-@lstm and @gru cells are designed for classical @rnn:pl can be used for cross-RNN, the only modification being the memory management external to the cell.
 
-The main benefit of cross-RNN architectures is that conservation of causality is granted by design.
-It comes, however, with a cost: the input of a cross-RNN model is sequential and cannot be made parallel.
-This cost is nonetheless mostly an issue for the training of the model, because processing one input in inference does not require passing through the entire sequence.
+For all other nodes $v in (UU \\ {u}) union (II \\ {i})$, the memory remains unchanged.
+
+Here, $g^u$ and $g^i$ are node-type-specific update functions analogous to $g$ in a standard @rnn.
+@lstm and @gru cells can be used within the cross-RNN framework, with the key distinction that memory management is handled externally to the cell.
+
+The primary advantage of cross-RNN architectures is their inherent preservation of causality.
+Since updates depend strictly on past states, the model respects the temporal order of interactions by design.
+However, this sequential nature introduces a limitation: cross-RNN models cannot be parallelized over the sequence during training.
+Fortunately, this constraint primarily affects training efficiency, during inference, each interaction can be processed independently, making the approach practical for real-time applications.
 
 == LiMNet <bg:limnet>
 
-@limnet is a cross-RNN model designed to optimize the memory utilization and computational speed at inference time.
-In the original paper@article:limnet, @limnet is designed as a complete framework for botnet detection in IoT networks, with four main components: an input feature map, a generalization layer, an output feature map, and a response layer.
-We will, however, for the purpose of this work, consider @limnet as a graph embedding module.
-Because the input feature map, output feature map, and the response layer are task-dependent, the denomination #quote("LiMNet") in this present work will designate only the generalization layer from this point.
+@limnet is a cross-RNN model designed to optimize memory utilization and computational efficiency during inference.
+In its original formulation @article:limnet, @limnet is part of a comprehensive framework for botnet detection in IoT networks.
+The framework includes four main components: an input feature map, a generalization layer, an output feature map, and a response layer.
+For the purposes of this work, however, we consider only the generalization layer.
+Since the other components are task-specific, the term #quote("LiMNet") in this thesis refers exclusively to the generalization layer.
 
-@limnet, as a graph embedding module, is a straightforward implementation of a cross-RNN module.
-This simplicity in the design brings two main benefits: first, @limnet is very cheap to run at inference time, with a memory requirement linear in the number of nodes in the network.
-Secondly, it is flexible to node insertion and deletion.
-If a new node is added to the graph, its embedding can be computed immediately, without the need to retrain the model.
-Node deletions are even easier to handle; all it takes is to delete the corresponding embedding from memory.
-In practice, @limnet has already proven its potential on the task of IoT botnet detection@article:limnet and fraud detection@limnet-finance-classification, it is thus expected that it could yield satisfying results for link-prediction, while requiring fewer resources than state-of-the-art solutions.
+As a graph embedding module, @limnet provides a straightforward implementation of a cross-RNN mechanism, @fig:limnet proposes a visualization of its architecture.
+This simplicity offers two main advantages.
+First, @limnet is highly efficient at inference time, with memory requirements that scale linearly with the number of nodes in the network.
+Second, it offers strong flexibility in handling dynamic node sets: when a new node is introduced, its embedding can be computed immediately without retraining the model.
+Deleting a node is even simpler: its embedding can just be removed from memory without consequences for the other embeddings.
+
+@limnet has already demonstrated promising results in tasks such as IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification. Given its design and prior success, it is a compelling candidate for link prediction tasks, particularly in settings where computational efficiency is a key constraint.
 
 #figure(
   image("../../../../figures/limnet-architecture.svg", width: 70%),
-  caption: "Architecture of "
-    + gls("limnet")
-    + ". User embeddings are indicated in green and items embeddings in purple.",
+  caption: "Architecture of LiMNet.",
   placement: auto,
 ) <fig:limnet>
