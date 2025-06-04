@@ -108,21 +108,23 @@ Inspired by the original @limnet proposition @article:limnet, we decided instead
 The idea is that big enough sequences could be a good enough approximation of the actual sequence of all the interactions.
 While each sequence still needs to be processed in order, several sequences can be processed in parallel, speeding up the training.
 
-=== Training and evaluation loops <m:processing>
+=== Evaluation and Training loop <m:processing>
 
-/* Unclear, flowchart could help. */
+#figure(
+  image("../../../../figures/framework-diagram.svg"),
+  caption: "Schema of the evaluation framework. Blue indicates that the implementation is tight to the model evaluated.",
+  placement: auto,
+) <fig:framework-architecture>
 
-The on-demand feature preparation discussed in @m:inputs ensures that each model can access the inputs that it requires.
-Unfortunately, the models' outputs also present structural discrepancies.
-Since this work's scope is limited to embedding models, all models' outputs should be fixed-size embeddings for either users or items.
-Some models, though, come with their own loss functions based on internal states.
-Accessing the right outputs to compute either the loss function or the metrics from the embeddings is therefore not something that can be managed identically for all models.
+Designing a framework that fits any model for a given task is a very challenging task, because the models have been designed with different formulations of the problems in mind.
+A first significant difference concerns the forms of the inputs, as explained in @m:inputs, the framework takes the decision to use the features to accommodate with these discrepancies.
+A second source of difference concerns the outputs, because the models are designed to solve the overarching problem of finding relevant items and may get there through different means.
+In the case of interaction prediction, the prediction can be made by computing embeddings that need to be compared, by directly predicting scores for each items, or even by computing the likelihood of the items to be interacted with.
 
-Because of this limitation, we decided to tie the evaluation logic of the models to the models' implementations.
-This includes going over a batch of interaction sequences, running the predictions, computing the loss, back propagation, updating the model memories, and producing measurable embeddings.
-However, we made sure to standardize all measures with fixed functions designed independently from the models with the sole purpose of measuring embeddings for the task of link prediction.
-In addition, the training and evaluation loops are managed in a unified way, limiting the risk of bugs occurring due to errors in code reproduction.
-These loops include going over the batches, reporting the results, and iterating over the epochs.
+This framework focuses on embedding creation, thus it only suits models that are computing user and item embeddings, evaluating their quality independently of the model producing them.
+However, all the logic regarding the training and loss evaluation is tied to the models implementation to leave space for different approaches.
+That is especially helpful to design loss functions that depends on the internal state of the model's memory rather than solely on its outputs.
+These design decisions can be identified in the framework architecture diagram shown in @fig:framework-architecture.
 
 === Comparison of the embeddings <m:outputs>
 
