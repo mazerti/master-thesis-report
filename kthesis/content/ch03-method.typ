@@ -27,27 +27,23 @@ Finally, we discuss in @m:baselines exploration we conducted with the baselines.
 
 == Datasets <m:datasets>
 
-We use three public datasets in this project, all directly taken from the Stanford Large Network Dataset Collection (accessible at #link("snap.stanford.edu/jodie/#datasets")).
-More specifically, these datasets were created by Kumar et al. in @jodie and have been reused a large number of times since then, to the extent that they have become de facto standard benchmarks for interaction network predictions.
+This project uses three publicly available datasets sourced from the Stanford Large Network Dataset Collection (accessible at #link("snap.stanford.edu/jodie/#datasets")).
+These datasets were originally compiled by Kumar et al. @jodie and have since become widely adopted as de facto standard benchmarks for evaluating interaction prediction models.
 
 *- Wikipedia edits:*
-This dataset gathers edits on Wikipedia pages over the course of a month.
-It is made of the 1,000 most edited pages during the month and the 8,227 users who edited at least 5 times any of these pages.
-In total, the dataset records 157,474 edits.
+This dataset captures edits made to Wikipedia pages over the course of one month.
+It includes the 1,000 most edited pages during that period and 8,227 users who each made at least five edits to these pages.
+In total, it contains 157,474 interactions.
 
 *- Reddit posts:*
-This dataset was built similarly to the Wikipedia dataset.
-The interactions on this dataset are 672,447 posts published by the 10,000 most active users on the 1,000 most active subreddits, over the course of a month.
-In total, this dataset records 672,447 interactions.
+Built using a similar methodology as the Wikipedia dataset, this dataset records 672,447 posts made by the 10,000 most active users on the 1,000 most active subreddits within a month.
 
 *- LastFM songs listens:*
-This dataset records music streams of the 1,000 most listened to songs on the LastFM website.
-These streams are performed by 1,000 users throughout one month and result in 1,293,103 total interactions.
+This dataset logs 1,293,103 music streams performed by 1,000 users on the 1,000 most listened-to songs on the LastFM platform, again over the span of one month.
 
-The initial publication also included another dataset compiling user interaction with massive open online courses (MOOCs).
-This dataset records interaction events performed by 7,047 students on 97 courses.
-/* Could extend and "bash" the datasets and the uses of it, using a graph or other argument that would make it relevant. */
-However, we decided to set it aside because we considered that it doesn't constitute a relevant use case for interaction prediction, as we expect users connecting to MOOC platform to already know on which course to work on.
+The original dataset publication also included a fourth dataset containing interactions between 7,047 students and 97 courses on a MOOC platform.
+However, we excluded this dataset from our experiments, as it does not reflect a relevant use case for interaction prediction.
+Users on MOOC platforms typically have a clear intent when accessing the platform, which diminishes the predictive value of interaction modeling in this context.
 
 #figure(
   table(
@@ -66,47 +62,54 @@ However, we decided to set it aside because we considered that it doesn't consti
   placement: auto,
 ) <table:datasets>
 
-The @table:datasets summarizes the characteristics of the datasets.
-We can see that the main difference between the Wikipedia and the Reddit datasets is the density.
-They both have a similar number of users and items, but in Reddit there are about four times more connections between them than in Wikipedia.
-In LastFM the density is almost 20 times higher compared with Reddit.
-Note also that the balance between users and items is perfectly respected, compared with the two other datasets.
+@table:datasets summarizes the key characteristics of the three selected datasets.
+While Wikipedia and Reddit have comparable numbers of users and items, Reddit is significantly denser, with roughly four times more interactions.
+LastFM is denser still, with nearly 20 times the interaction density of Reddit.
+Notably, LastFM also exhibits a perfectly balanced user-to-item ratio, in contrast to the other two datasets.
 
 == Experimental framework <m:framework>
 
-Evaluating embedding models is a complex task because it requires accommodating a wide variety of input and output shapes, along with diverse training and inference procedures, while still ensuring the fairness of the evaluation between the different methods.
+Evaluating embedding models is inherently complex due to the variety of input and output formats, as well as the diversity of training and inference procedures.
+Despite these differences, a fair and consistent evaluation across models must be ensured.
 
-This complexity blooms with temporal graphs because there are different ways to approach them.
-One model can be approaching a temporal graph as a series of static graphs, another one can approach it as a time series @survey-dynamic-gnn /*It's weird to have only one citation here, none may be better.*/, and yet another one could try to maintain a dynamical representation of the graph on the fly.
-None of these approaches is inherently better or worse than the others, and they can all open up different design opportunities.
+This complexity is further amplified in the case of temporal graphs, which can be interpreted in multiple ways depending on the structural and temporal aspects one wishes to emphasize.
+A temporal graph may be decomposed into a sequence of static snapshots taken at regular intervals, represented as a continuous time series of events, or treated as a dynamic structure where nodes and edges evolve over time @survey-dynamic-gnn/* More reference needed */.
+These different interpretations offer varied trade-offs in terms of temporal resolution, scalability, expressiveness, and design opportunities, without any single approach being universally optimal.
 
-The implementation we came up with is publicly available on GitHub under the following link: #link("https://github.com/mazerti/link-prediction").
+Our implementation is publicly available on GitHub at: #link("https://github.com/mazerti/link-prediction").
 
-In this section, we will detail the design decisions that led to our final evaluation framework.
-We grouped these decisions into four categories: Preparation of the data, Batching strategy, Training and evaluation loops, and comparison of the embeddings.
+The following subsections describe the design choices that guided the development of our evaluation framework.
+These are organized into four key components: data preparation, batching strategy, evaluation and training loop, and embedding comparison.
 
-=== Preparation of the data <m:inputs>
+=== Data preparation <m:inputs>
 
-The datasets provide us with three types of information for each recorded interaction: the identifiers of the interacting user and item, the timestamp at which the interaction took place, and a set of features providing additional information about the interaction.
-Most of the time, the models tested use only the identifiers and the implicit order of the interaction.
-Thus, the framework will always provide as inputs the IDs of the user and item interacting in the order the interactions happen.
+Each recorded interaction in the datasets provides three types of information: the identifiers of the interacting user and item, the timestamp of the interaction, and a set of optional features that offer additional context.
+In most cases, the evaluated models rely primarily on the user and item identifiers, along with the implicit temporal order of the interactions.
+As such, the framework consistently supplies user and item IDs in the exact sequence in which the interactions occur.
 
-In addition, the framework can add features to the inputs.
-These features can be requested either by the user through the configuration file or directly by the model's implementation during the model's initialization.
-This second option allows for seamless use of models relying on custom features without the requirement to manually request the features each time the model is used.
-This is especially relevant for time information, because each model can have a different use of the timestamps.
-A common usage is to use the time delta between successive interactions of the same user.
-This information would be expensive to compute at inference because it would require keeping track of the timestamp of the last interaction each user has performed at any time step.
-Pre-computing it as a feature, on the other hand, is much more convenient because we have access to all the interactions at once, allowing for the computation of the time deltas in a simple query operation.
+The framework also supports the inclusion of custom features in the input.
+These features can be specified either by the user through a configuration file or automatically requested by the model implementation during initialization.
+This flexibility ensures that models requiring specific features can be seamlessly integrated without manual intervention.
+Time-related features, in particular, benefit from this design.
+For example, some models use the time delta between successive interactions by the same user.
+While calculating this value at inference time would be computationally expensive, as it requires real-time tracking of each user's previous interactions, it can be efficiently pre-computed when the full interaction history is available, reducing it to a straightforward query operation.
 
 === Batching Strategy <m:batching>
 
-As pointed out by previous work @jodie @deepred, temporal interaction comes with a tradeoff regarding the ability to leverage parallelism for training.
-Kumar et al. proposed for their model JODIE an elaborate batching strategy based on the structure of the graph @jodie, and Kefato et al. removed the recursions from their model DeePRed by approximating the dynamic embeddings with static ones @deepred.
+Temporal interaction modeling inherently involves a tradeoff between preserving the sequential nature of data and maximizing training efficiency through parallelism.
+As highlighted in prior work @jodie @deepred, maintaining causality often comes at the cost of reduced parallelization capabilities.
+In the JODIE model, Kumar et al. addressed this by designing a graph-structure-aware batching strategy that retains temporal coherence while enabling some degree of parallel processing @jodie.
+Meanwhile, Kefato et al. proposed an alternative in DeePRed by eliminating recursion entirely, replacing dynamic embeddings with static approximations to simplify training @deepred.
 
-Inspired by the original @limnet proposition @article:limnet, we decided instead to slice the data into sequences of fixed size.
-The idea is that big enough sequences could be a good enough approximation of the actual sequence of all the interactions.
-While each sequence still needs to be processed in order, several sequences can be processed in parallel, speeding up the training.
+Drawing inspiration from the original @limnet framework @article:limnet, we adopt a different approach: slicing the dataset into fixed-size sequences.
+The rationale is that sufficiently long sequences can serve as a reasonable approximation of the full interaction history.
+Each individual sequence is processed in temporal order, thereby preserving internal causal structure.
+However, because sequences are independent of one another, they can be processed in parallel, significantly accelerating training.
+
+This strategy offers a practical compromise.
+It enables the model to learn from temporally ordered data without incurring the full computational burden of processing the entire dataset sequentially.
+Moreover, it allows for flexibility in choosing the sequence length, which can be tuned to balance modeling capacity and computational efficiency.
+In our experiments, we found that shorter sequences often performed comparably well, suggesting that most relevant predictive signals are contained in recent interaction history.
 
 === Evaluation and Training loop <m:processing>
 
@@ -126,7 +129,7 @@ However, all the logic regarding the training and loss evaluation is tied to the
 That is especially helpful to design loss functions that depends on the internal state of the model's memory rather than solely on its outputs.
 These design decisions can be identified in the framework architecture diagram shown in @fig:framework-architecture.
 
-=== Comparison of the embeddings <m:outputs>
+=== Embedding comparison <m:outputs>
 
 The last challenge in the implementation concerns the embeddings.
 While we want to create embeddings to synthesize the information, it is not the actual end goal of the system.
