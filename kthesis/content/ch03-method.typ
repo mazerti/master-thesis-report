@@ -169,17 +169,17 @@ However, as discussed in @bg:limnet, the implementation we use is stripped down 
 
 === Loss functions <m:lossses>
 
-/* Better explanations about regularization loss, mention models' laziness, as a replacement to negative examples */
-
 We also had to adapt the loss used to train @limnet, because, unlike botnet detection, link-prediction isn't a classification setting, so we couldn't use cross-entropy Loss as the original model did.
 Instead, we decided to use a mix of two losses.
-The first is an objective loss to minimize the distance between the embedding of the interacting user and item, which is calculated using the mean squared error for the embeddings or their dot product to 1.
-And the second is a regularization loss to maximize the information retention by maximizing the distance between different users and between different items.
-This loss is computed as follows:
+The first is an objective loss to minimize the distance between the embedding of the interacting user and item, which is calculated using the mean squared error for the embeddings, or their dot product to 1 when the embeddings are normalized (see @m:normalize).
+The objective loss does not suffices to train the model, because neural networks are lazy, using only the distance between the embeddings would lead all embeddings to eventually collapse to the same value.
+To evade this, a regularization loss is added to the objective loss.
+That loss aims to maximize the information retention over all the embeddings by maximizing the distance between different users and between different items.
+This second loss is computed as follows:
 $ L_"reg" = bold(U) bold(U)^T + bold(I)bold(I)^T $
 Where $bold(U)$ and $bold(I)$ are respectively the matrix containing all the users' embeddings and the matrix containing all the items' embeddings.
 
-In addition to this simplification, we proposed three modifications to enhance the model: adding time features, normalizing the embeddings, and stacking several @limnet layers.
+In addition to simplifying the architecture and adapting the loss, we proposed three modifications to enhance the model: adding time features, normalizing the embeddings, and stacking several @limnet layers.
 
 === Addition of time features <m:time-features>
 
