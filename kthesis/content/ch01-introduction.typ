@@ -4,8 +4,8 @@
 
 == Purpose/Motivation <i:motivation> /* Can't keep that title */
 
-The rapid expansion of digital technologies has led to an overwhelming abundance of information, making it increasingly difficult to identify relevant and meaningful content.
-In response to this challenge, search engines and recommendation systems have become essential tools for filtering and navigating vast data landscapes.
+The rapid expansion of digital technologies has led to an overwhelming abundance of information, making it increasingly difficult to identify relevant and meaningful content @quantifying-information-overload-2014 @overview-information-communication-2017.
+In response to this challenge, search engines and recommendation systems have become essential tools for filtering and navigating vast data landscapes @causes-consequences-strategies-2024.
 
 Both systems share a common objective: to deliver information that is most relevant to the user.
 Content personalization has emerged as a particularly effective approach among the many techniques developed to achieve this.
