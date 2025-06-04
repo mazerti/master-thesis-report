@@ -8,13 +8,12 @@ An abstract should stand on its own, i.e., no citations, cross-references to the
 Write this early and revise as necessary.
 This will help keep you focused on what you are trying to do.
 */
-User-item recommendation is a central challenge for search engines, social media platforms, and streaming services. The difficulty arises from the need to model information that is both relational and dynamic over time, two aspects that many existing solutions tend to address in isolation.
+User-item recommendation is a central challenge for search engines, social media platforms, and streaming services, due to the need to model both relational structures and temporal dynamics. Many existing solutions address these two aspects separately, limiting their ability to fully capture user behavior.
 
-In this work, we attempt to bridge that gap by evaluating Lightweight Memory Networks (LiMNet), a model designed to capture causal relationships within sequences of temporal interactions. To assess its potential, we developed a benchmarking framework for user-item recommendation and compared LiMNet against Jodie, a state-of-the-art model for interaction prediction.
+In this work, we attempt to bridge that gap by evaluating Lightweight Memory Networks (LiMNet), a model designed to preserve causal relationships within sequences of temporal interactions. To assess its potential, we developed a benchmarking framework for user-item interaction prediction. We compared LiMNet against Jodie, a state-of-the-art baseline, across three real-world datasets: Wikipedia page edits, Reddit post submissions, and LastFM music streams. These datasets vary in scale and interaction patterns, providing a comprehensive testbed.
 
-Our experiments use three real-world datasets: Wikipedia page edits, Reddit post submissions, and LastFM music streams, each representing distinct scales and interaction characteristics. While LiMNet exhibits some promising features, our results highlight its limitations in matching the performance of more specialized models. Furthermore, our observations hint at an underlying bias across all datasets toward short-term global popularity, raising questions about the nature of temporal signals that current models are capturing.
-
-/* 
+Our results show that while LiMNet offers advantages in efficiency and adaptability, it consistently underperforms compared to Jodie in predictive accuracy. Additionally, our findings hint at a consistent bias across all datasets toward short-term global popularity. This suggests that existing models may be overfitting to recent trends rather than learning long-term user preferences, highlighting a potential limitation in the current evaluation paradigms.
+/*
 An abstract is (typically) about 250 and 350 words (1/2 A4-page) with the following components:
 - What is the topic area?
   (optional) Introduces the subject area for the project.
