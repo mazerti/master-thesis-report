@@ -7,20 +7,24 @@ Did you meet your goals? What insights have you gained?
 What suggestions can you give to others working in this area?
 If you had it to do again, what would you have done differently? */
 
-The goal of this thesis was to understand the potential of the @limnet model for interaction prediction task on a user-item dynamical network.
-This research question led to the creation of an evaluation framework for this task, the evaluation of variants of the @limnet model on this framework, along with re-implementing the Jodie model as a baseline.
-There are three key findings of this thesis:
-Firstly, @limnet significantly underperform on the interaction prediction task compared with Jodie.
-Secondly, normalizing the embeddings throughout the cross-RNN mechanism improves the performance of the model.
-Lastly, the length of the interaction sequence processed by the models have little impact on the models results, hinting at short term global trends effect dominance over long term local preference behaviors.
+The objective of this thesis was to evaluate the potential of the @limnet model for interaction prediction in user-item dynamic networks.
+Addressing this research question led to the development of an evaluation framework tailored to this task, the adaptation and assessment of multiple @limnet variants, and the reimplementation of the Jodie model as a state-of-the-art baseline.
+
+This study yielded three key findings:
+
++ @limnet significantly underperforms on the interaction prediction task when compared to Jodie.
++ Embedding normalization within the cross-RNN mechanism leads to a substantial improvement in @limnet's performance.
++ Sequence length has minimal impact on model performance, suggesting that short-term global trends dominate over long-term, user-specific preferences in the datasets examined.
 
 == Limitations
 /* What did you find that limited your efforts? What are the limitations of your results? */
 
-To keep the project's scope to a reasonable size, some questions had to be set aside during the research project, thus, the findings only concerns the task of user-item interaction prediction and doesn't address more general link-prediction tasks.
-In addition, this work focused on embedding creation with little consideration for how to most efficiently employ these embeddings.
-Another aspect that was left over during the research process was the performance tests, and more specifically the performance at inference.
-That aspect is one of the most benefit of the @limnet architecture as demonstrated in @article:limnet, it is therefore good to keep in mind this limitation of the present project when assessing the potential of @limnet.
+To maintain a manageable scope, certain questions were left aside during the research process of this thesis.
+One of them is that the findings are specific to the task of user-item interaction prediction and do not generalize to broader link prediction scenarios.
+Additionally, the study focused primarily on the generation of embeddings, with less emphasis on how to most effectively leverage them for downstream tasks.
+
+Performance evaluation at inference time was also not addressed, even though this is one of @limnet's key architectural advantages, as demonstrated in prior work @article:limnet.
+This omission should be considered when interpreting the model's potential and drawing conclusions about its practical utility.
 
 == Future Works
 /* Describe valid future work that you or someone else could or should do.
@@ -28,11 +32,12 @@ Consider: What you have left undone?
 What are the next obvious things to be done?
 What hints can you give to the next person who is going to follow up on your work? */
 
-The experiment on sequence length discussed in @ex:sequence-length exposed a surprising and novel view on the underlying mechanisms that steer the behaviors recorded in the datasets used.
-Therefore, it would be very beneficial to try the models tested in this study on more suited datasets that do exhibits more complex long-term and local behaviors.
+The sequence length experiment discussed in @ex:sequence-length revealed a novel and surprising insight into the mechanisms underlying user-item interactions.
+To validate and extend these observations, future work should test both @limnet and Jodie on datasets that exhibit more complex, long-term, and localized behavioral patterns.
 
-The other interesting gap we suggest to explore is the difference between the performances of the @limnet model and the Jodie one, since both models share the same core, it is surprising to witness such a big difference in their capabilities.
-Exploring the design space that separates this models through an ablation study of the components of Jodie could bring more insight on which architectural decision generates such a performance leap.
+Another promising avenue for future research is exploring the significant performance gap between @limnet and Jodie.
+Despite sharing a common core, the two models demonstrate dramatically different capabilities.
+An ablation study focusing on Jodie's architectural components could shed light on which design decisions contribute most to its superior performance.
 
 // == Reflections
 /* What are the relevant economic, social, environmental, and ethical aspects of your work? */
@@ -40,14 +45,12 @@ Exploring the design space that separates this models through an ablation study 
 == Ethics and Sustainability <c:ethics>
 // move to conclusion
 
+As machine learning systems increasingly rely on large-scale data and compute resources, there is growing concern about widening inequalities that favor large institutions.
+@limnet offers potential mitigation through three architectural and practical strengths:
 
-The progress of Machine Learning applications, which allows for leveraging big data sources at the expense of large infrastructure costs, increases the risk of inequalities by increasing the power given to the biggest institutions.
-However, for this project, that risk is mitigated thanks to three aspects of the @limnet architecture.
-Firstly, the big selling points of this architecture are its scalability and lightweight aspect, both elements that contribute to reduce the entry cost to run such a model.
-Secondly, there is ongoing research to adapt this architecture into a decentralized and collaborative variant @metasoma.
-That variant may allow communities to leverage the model using distributed resources.
-Lastly, this project is public and thus easily accessible for legislators and law enforcers.
-There is an ever-increasing need to push the legislation on the use of new technologies, and research allowing legislators to take informed decisions about these subjects that still contain a lot of unknowns is valuable.
++ Its scalability and lightweight design reduce infrastructure requirements, lowering the barrier to entry.
++ Ongoing efforts to develop decentralized and collaborative versions of @limnet @metasoma could empower communities to deploy models using distributed resources.
++ This project's public availability enhances accessibility for regulators and policymakers, contributing to more informed legislative decision-making in an area still filled with uncertainty.
 
-The reduced cost of computing power is also subject to potential environmental impacts.
-It is, however, still unclear if increasing energy efficiency leads to an actual energy saving in the long run @rebound-effect-no-backfire.
+On the environmental front, while @limnet's efficiency may reduce the cost of computation, it is still unclear whether improved efficiency translates into net energy savings in the long term @rebound-effect-no-backfire.
+This consideration highlights the need for continued attention to the ecological impact of machine learning research and deployment.
