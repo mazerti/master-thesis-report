@@ -61,7 +61,7 @@ For instance, tasks like friendship prediction on a social network fall outside 
 Consequently, each entity is strictly classified as either a user or an item, with no allowance for hybrid or hierarchical roles.
 And only one kind of interaction is considered, e.g. user listening to a song but not artist posting a song.
 
-Furthermore, this work considers only punctual interactions—discrete events occurring at specific points in time.
+Furthermore, this work considers only punctual interactions, i.e. discrete events occurring at specific points in time.
 Continuous interactions are excluded, and due to data limitations, the duration of interactions is not modeled.
 Although interaction durations could offer meaningful insights into engagement or relevance, they remain outside the scope of this thesis.
 
