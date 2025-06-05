@@ -8,18 +8,15 @@ The rapid expansion of digital technologies has led to an overwhelming abundance
 In response to this challenge, search engines and recommendation systems have become essential tools for filtering and navigating vast data landscapes @causes-consequences-strategies-2024.
 
 Both systems share a common objective: to deliver information that is most relevant to the user.
-Content personalization has emerged as a particularly effective approach among the many techniques developed to achieve this.
-Rather than applying a one-size-fits-all filter, personalized systems adapt their output based on user-specific context such as search history, demographics, and past interactions.
-
-Content personalization lies at the heart of recommendation systems and is highly effective in enhancing search engine performance.
+Rather than applying a one-size-fits-all filter, content personalization techniques have emerged as a particularly effective approach that, instead, adapt their output based on user-specific context such as search history, demographics, and past interactions @explaining-user-experience-2012.
+While content personalization is a natural solution for recommendation systems, it is also highly effective in enhancing search engine performance @personalization-web-search.
 For instance, a search query for the term "football" should yield different results for a user interested in American football compared to someone seeking information about association football (soccer).
 
 Content personalization can be represented as an algorithm that takes user-specific information as input and produces a ranked list of items from a larger catalog.
 These items can include any kind of content available to the user, such as songs in a music streaming service or web pages returned by a search engine.
 
-Evaluating the performance of such algorithms typically requires knowledge of which items are genuinely relevant to each user.
-However, obtaining this information can be costly and, in some cases, unfeasible.
-On the other hand, user behaviors—such as clicks, listens, or edits—are easy to collect at scale.
+However, evaluating the performance of such algorithms typically requires knowledge of which items are genuinely relevant to each user, knowledge that can be costly and, in some cases, impossible to collect.
+Therefore, user behaviors such as clicks, listens, or edits, that are easy to collect at scale are often used instead.
 As a result, content recommendation is often approximated as an interaction prediction task, where the goal is to predict future user-item interactions based on past behavior.
 
 Interaction prediction is a self-supervised learning task in which past user-item interactions serve first as labels and later as input features used to predict future interactions.
@@ -37,15 +34,18 @@ Given these promising characteristics and its ability to exploit precisely the t
 
 == Problem <i:problem>
 
-The core research question for this work is the following:
+The core research question guiding this work is:
 
 #align(center)[
   #quote("Does LiMNet have the potential to compete against state-of-the-art models on the task of interaction prediction for user-item network?")
 ]
 
-@limnet has shown significant promise, yet its evaluation has been limited to botnet detection in IoT networks @article:limnet, with some additional results available for cryptocurrency fraud detection @limnet-finance-classification.
-This project aims to apply and assess @limnet in the context of interaction prediction, thereby evaluating the model's generalizability across a broader range of tasks.
-Addressing this research question supports two main goals: first, to explore the applicability of the @limnet architecture to diverse domains, and second, to better understand the characteristics that drive the success of similar state-of-the-art interaction prediction models.
+@limnet has shown promising results in specialized domains such as IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification, but its capabilities have not yet been tested in the context of user-item interaction prediction.
+This gap raises important questions about the generalizability of @limnet and whether its lightweight, causal and scalable architecture can match the performance of more established, domain-specific models.
+
+In addressing this central question, the thesis pursues two main objectives:
+- Evaluate the performance of the original @limnet architecture on user-item interaction prediction tasks.
+- Explore the architectural potential of @limnet by implementing and evaluating a series of targeted improvements.
 
 To this end, we develop a flexible evaluation framework supporting multiple models while ensuring fair and consistent comparisons.
 Additionally, we implement and evaluate several architectural adaptations to @limnet, aiming not only to improve its performance on interaction prediction but also to further investigate the design space enabled by its modular structure.
