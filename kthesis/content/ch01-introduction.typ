@@ -2,7 +2,7 @@
 
 = Introduction <intro>
 
-== Purpose/Motivation <i:motivation> /* Can't keep that title */
+== Motivation <i:motivation> /* Can't keep that title */
 
 The rapid expansion of digital technologies has led to an overwhelming abundance of information, making it increasingly difficult to identify relevant and meaningful content @quantifying-information-overload-2014 @overview-information-communication-2017.
 In response to this challenge, search engines and recommendation systems have become essential tools for filtering and navigating vast data landscapes @causes-consequences-strategies-2024.
@@ -24,11 +24,14 @@ As a result, content recommendation is often approximated as an interaction pred
 
 Interaction prediction is a self-supervised learning task in which past user-item interactions serve first as labels and later as input features used to predict future interactions.
 Unlike other self-supervised tasks, it is distinguished by the inherently relational nature of the data: each interaction connects users and items, forming a web of dependencies that influence future behavior.
-
 As a result, these interactions are often modeled as user-item networks to highlight the structural relationships between entities.
-Besides, the temporal dimension—including the order and timing of interactions—typically plays a critical role in accurately modeling and understanding user behavior over time.
 
-@limnet @article:limnet is a simple machine learning model designed to process user-item interactions in a causal manner, leveraging both relational information and the order of interactions.
+Besides, the temporal dimension, which includes the order and timing of interactions, typically plays a critical role in accurately modeling and understanding user behavior over time.
+One natural way to model both temporal and relational information is to use a temporal interaction network, that is, a network where each interaction is linked to a timestamp.
+This way, following the order of the timestamps reveals the network and it's evolutions, presenting an ever changing map of relationships between the users and the items and allowing for more nuanced and dynamic predictions.
+Yet, few solutions rely on this model, despite it's intuitive definition, which motivated this work to look further into existing solutions.
+
+@limnet @article:limnet is a simple machine learning model designed to process temporal interactions in a causal manner, leveraging both relational information and the order of interactions.
 The model has demonstrated strong performance in tasks such as botnet detection in IoT networks, and it is built in a modular, adaptive way that makes it easy to apply to other problems.
 Given these promising characteristics and its ability to exploit precisely the types of information that make interaction prediction challenging, @limnet appears to be a compelling candidate for this task.
 
