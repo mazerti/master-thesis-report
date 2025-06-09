@@ -25,8 +25,8 @@ As a result, these interactions are often modeled as user-item networks to highl
 
 Besides, the temporal dimension, which includes the order and timing of interactions, typically plays a critical role in accurately modeling and understanding user behavior over time.
 One natural way to model both temporal and relational information is to use a temporal interaction network, that is, a network where each interaction is linked to a timestamp.
-This way, following the order of the timestamps reveals the network and it's evolutions, presenting an ever changing map of relationships between the users and the items and allowing for more nuanced and dynamic predictions.
-Yet, few solutions rely on this model, despite it's intuitive definition, which motivated this work to look further into existing solutions.
+This way, following the order of the timestamps reveals the network and its evolutions, presenting an ever changing map of relationships between the users and the items and allowing for more nuanced and dynamic predictions.
+Yet, few solutions rely on this model, despite its intuitive definition, which motivated this work to look further into existing solutions.
 
 @limnet @article:limnet is a simple machine learning model designed to process temporal interactions in a causal manner, leveraging both relational information and the order of interactions.
 The model has demonstrated strong performance in tasks such as botnet detection in IoT networks, and it is built in a modular, adaptive way that makes it easy to apply to other problems.
@@ -42,6 +42,7 @@ The core research question guiding this work is:
 
 @limnet has shown promising results in specialized domains such as IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification, but its capabilities have not yet been tested in the context of user-item interaction prediction.
 This gap raises important questions about the generalizability of @limnet and whether its lightweight, causal and scalable architecture can match the performance of more established, domain-specific models.
+Interaction prediction also differs fundamentally from botnet or fraud detection tasks, as it is a ranking task rather than a classification one, necessitating additional adaptations to the @limnet model.
 
 In addressing this central question, the thesis pursues two main objectives:
 - Evaluate the performance of the original @limnet architecture on user-item interaction prediction tasks.
