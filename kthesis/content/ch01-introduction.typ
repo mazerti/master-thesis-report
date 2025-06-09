@@ -2,7 +2,7 @@
 
 = Introduction <intro>
 
-== Motivation <i:motivation> /* Can't keep that title */
+== Motivation <i:motivation>
 
 The rapid expansion of digital technologies has led to an overwhelming abundance of information, making it increasingly difficult to identify relevant and meaningful content @quantifying-information-overload-2014 @overview-information-communication-2017.
 In response to this challenge, search engines and recommendation systems have become essential tools for filtering and navigating vast data landscapes @causes-consequences-strategies-2024.
@@ -25,7 +25,7 @@ As a result, these interactions are often modeled as user-item networks to highl
 
 Besides, the temporal dimension, which includes the order and timing of interactions, typically plays a critical role in accurately modeling and understanding user behavior over time.
 One natural way to model both temporal and relational information is to use a temporal interaction network, that is, a network where each interaction is linked to a timestamp.
-This way, following the order of the timestamps reveals the network and its evolutions, presenting an ever changing map of relationships between the users and the items and allowing for more nuanced and dynamic predictions.
+This way, following the order of the timestamps reveals the network and its evolutions, presenting an ever-changing map of relationships between the users and the items and allowing for more nuanced and dynamic predictions.
 Yet, few solutions rely on this model, despite its intuitive definition, which motivated this work to look further into existing solutions.
 
 @limnet @article:limnet is a simple machine learning model designed to process temporal interactions in a causal manner, leveraging both relational information and the order of interactions.
