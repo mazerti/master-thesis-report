@@ -16,7 +16,7 @@ Content personalization can be represented as an algorithm that takes user-speci
 These items can include any kind of content available to the user, such as songs in a music streaming service or web pages returned by a search engine.
 
 However, evaluating the performance of such algorithms typically requires knowledge of which items are genuinely relevant to each user, knowledge that can be costly and, in some cases, impossible to collect.
-Therefore, user behaviors such as clicks, listens, or edits, that are easy to collect at scale are often used instead.
+Therefore, user behaviors such as clicks, listens, or edits, that are easy to collect at scale are often used instead @implicit-feedback-recommender-systems.
 As a result, content recommendation is often approximated as an interaction prediction task, where the goal is to predict future user-item interactions based on past behavior.
 
 Interaction prediction is a self-supervised learning task in which past user-item interactions serve first as labels and later as input features used to predict future interactions.
@@ -37,7 +37,7 @@ Given these promising characteristics and its ability to exploit precisely the t
 The core research question guiding this work is:
 
 #align(center)[
-  #quote("Does LiMNet have the potential to compete against state-of-the-art models on the task of interaction prediction for user-item network?")
+  #quote("Can an adaptation of LiMNet have the potential to compete against state-of-the-art models on the task of interaction prediction for user-item network?")
 ]
 
 @limnet has shown promising results in specialized domains such as IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification, but its capabilities have not yet been tested in the context of user-item interaction prediction.
@@ -69,7 +69,12 @@ Although interaction durations could offer meaningful insights into engagement o
 
 The main contributions of this project are as follows:
 - Development and publication of a framework for evaluating models on the user-item interaction prediction task.
-- Presentation and evaluation of LiMNet, an embedding model originally proposed for IoT botnet detection. Our evaluation shows that, in its current form, LiMNet does not match the performance of state-of-the-art baselines.
-- Proposal and testing of architectural modifications to LiMNet aimed at improving its performance in the context of user-item interaction prediction.
-- Reproduction and evaluation of Jodie, a state-of-the-art model for temporal interaction prediction. Interestingly, our implementation produced results that exceeded expectations.
+- Presentation and evaluation of @limnet, an embedding model originally proposed for IoT botnet detection.
+- Proposal and testing of architectural modifications to @limnet aimed at improving its performance in the context of user-item interaction prediction.
+- Reproduction and evaluation of Jodie, a state-of-the-art model for temporal interaction prediction.
+Interestingly, our implementation produced results that exceeded expectations.
 - Identification of a possible structural bias in the benchmark datasets, suggesting they may favor global popularity trends over more complex, long-term behavioral patterns.
+
+Our evaluation demonstrates that, in its simplified form, @limnet does not achieve competitive performance with state-of-the-art baseline and is therefore not well-suited for the task of interaction prediction.
+However, we identified a meaningful improvement by normalizing the embeddings stored in the model's memory, which significantly enhanced predictive accuracy, even though not enough to match the baseline.
+Additionally, we observed that varying the sequence length had minimal impact on performance, suggesting that the datasets are dominated by short-term global trends rather than long-term user-specific behaviors.
