@@ -167,7 +167,7 @@ However, the ability to reproduce experiments and to reuse existing models, eith
 
 To balance these needs, the framework has been designed with clarity, reproducibility, and extensibility in mind.
 Three principles have guided its development: comprehensive documentation, centralized state management, and a functional programming approach.
-Every function in the framework is systematically documented #footnote("Due to time constraints, the code quality deteriorated a bit during the last steps of the projects, leading to some undocumented functions.") to help future researchers quickly grasp the implementation, whether to reuse the code or replicate its behavior in a new context.
+Every function in the framework is systematically documented /*#footnote("Due to time constraints, the code quality deteriorated a bit during the last steps of the projects, leading to some undocumented functions.")*/ to help future researchers quickly grasp the implementation, whether to reuse the code or replicate its behavior in a new context.
 
 To further streamline usability, state management has been centralized in a single component: the Context class.
 This class acts as a unified store for all stateful elements of the framework, ensuring that any part of the system can access necessary state variables with minimal effort.
