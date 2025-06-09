@@ -12,9 +12,20 @@ Addressing this research question led to the development of an evaluation framew
 
 This study yielded three key findings:
 
-+ @limnet significantly underperforms on the interaction prediction task when compared to Jodie.
-+ Embedding normalization within the cross-RNN mechanism leads to a substantial improvement in @limnet's performance.
-+ Sequence length has minimal impact on model performance, suggesting that short-term global trends dominate over long-term, user-specific preferences in the datasets examined.
+1. @limnet significantly underperforms on the interaction prediction task when compared to Jodie.
+Stripped down to its core cross-RNN memory module, @limnet is clearly unable to match Jodie's performance across all datasets.
+Notably, the performance gap widens on more complex datasets, suggesting that Jodie's additional architectural components, such as its static embeddings and projection mechanism, play a critical role in enhancing predictive capability.
+It is important to emphasize that the version of @limnet tested here excludes several components included in its original architecture.
+This simplification may explain why @limnet performs poorly in this context, despite achieving strong results in domains like IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification.
+
+2. Embedding normalization within the cross-RNN mechanism leads to a substantial improvement in @limnet's performance.
+By maintaining normalized embeddings in memory, the model is encouraged to encode information through angular differences rather than magnitude.
+This alignment with the dot-product scoring method (i.e., cosine similarity) ensures that the memory state and the scoring function are consistent, which in turn improves the overall performance of the model.
+
+3. Sequence length has minimal impact on model performance
+The performance of both @limnet and Jodie remained relatively stable when trained and evaluated on significantly shorter sequences.
+This stability implies that the models primarily learn from recent and globally popular interaction patterns (i.e. trends) rather than from long-term, user-specific histories.
+This behavior is likely influenced by the dataset construction, which emphasizes the most popular items and most active users over a fixed time period.
 
 == Limitations
 /* What did you find that limited your efforts? What are the limitations of your results? */
