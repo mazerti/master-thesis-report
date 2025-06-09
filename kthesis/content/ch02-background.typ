@@ -2,10 +2,10 @@
 = Background
 
 This chapter provides the background for the project.
-In @bg:link-prediction, we provide an overview of link prediction and the classical solutions for the problem.
+In @bg:link-prediction, we provide an overview of the more standard link prediction task and the classical solutions for the problem.
 In @bg:grl, we further develop the concept of graph embedding and some common methods to create them.
 Then, in @bg:dynamic-graphs, we discuss the addition of a time dimension in graph-shaped data and the way it can be exploited, followed by a presentation of cross-RNN architectures in @bg:cross-rnn.
-Finally, we present the model of interest for this work in @bg:limnet and why we believe that it is a relevant addition to the task of link prediction.
+Finally, we present the model of interest for this work in @bg:limnet and why we believe that it is a relevant addition to the task of interaction prediction.
 
 == User-Item Link Prediction <bg:link-prediction>
 
@@ -132,7 +132,7 @@ First, @limnet is highly efficient at inference time, with memory requirements t
 Second, it offers strong flexibility in handling dynamic node sets: when a new node is introduced, its embedding can be computed immediately without retraining the model.
 Deleting a node is even simpler: its embedding can just be removed from memory without consequences for the other embeddings.
 
-@limnet has already demonstrated promising results in tasks such as IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification. Given its design and prior success, it is a compelling candidate for link prediction tasks, particularly in settings where computational efficiency is a key constraint.
+@limnet has already demonstrated promising results in tasks such as IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification. Given its design and prior success, it is a compelling candidate for interaction prediction tasks, particularly in settings where computational efficiency is a key constraint.
 
 #figure(
   image("../../../../figures/limnet-architecture.svg", width: 70%),
