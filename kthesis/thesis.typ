@@ -28,12 +28,13 @@
   // Field "alpha-3" is the language's ISO 639-3 code, for non-"en"/"sv" langs.
   localized-info: (
     en: (
-      title: "Lightweight Memory Networks for Link Prediction",
+      title: "Lightweight Memory Networks for Interaction Prediction",
       subtitle: "Generalization of the LiMNet Architecture",
       abstract: include "./content/abstract-1-en.typ",
       keywords: (
         "Graph Representation Learning",
         "Temporal Interaction Networks",
+        "Interaction Prediction",
         "Link Prediction",
         "Data Mining",
         "Machine Learning",
@@ -41,7 +42,7 @@
       ),
     ),
     sv: (
-      title: "Lightweight Memory Networks för Länkprediktion",
+      title: "Lightweight Memory Networks för interaktion prediktion", // TODO: Check translation
       subtitle: "Generalization av LiMNet Arkitektur",
       abstract: include "./content/abstract-2-sv.typ",
       keywords: (
@@ -118,14 +119,14 @@
   // Host organization collaborating for this thesis; may be none
   host-org: none,
   // Names of opponents for this thesis; may be none until they're assigned
-  opponents: ("Mary Ignatia", "Alexander Smith"),
+  opponents: (),
   // Thesis presentation details; may be none until it's scheduled and set.
   // Either "online" or "location" fields may be none, but not both.
   presentation: (
     language: "en",
-    slot: datetime(year: 2025, month: 6, day: 14, hour: 13, minute: 0, second: 0),
-    online: (service: "Zoom", link: "https://kth-se.zoom.us/j/111222333"),
-    location: (room: "F1 (Alfvénsalen)", address: "Lindstedtsvägen 22", city: "Stockholm"),
+    slot: datetime(year: 2025, month: 6, day: 23, hour: 13, minute: 0, second: 0),
+    online: (service: "Zoom", link: ""),
+    location: (room: "", address: "", city: "Stockholm"),
   ),
   // Acknowledgements body
   acknowledgements: include "content/acknowledgements.typ",
