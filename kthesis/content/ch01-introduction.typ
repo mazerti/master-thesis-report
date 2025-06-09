@@ -17,16 +17,16 @@ These items can include any kind of content available to the user, such as songs
 
 However, evaluating the performance of such algorithms typically requires knowledge of which items are genuinely relevant to each user, knowledge that can be costly and, in some cases, impossible to collect.
 Therefore, user behaviors such as clicks, listens, or edits, that are easy to collect at scale are often used instead @implicit-feedback-recommender-systems.
-As a result, content recommendation is often approximated as an interaction prediction task, where the goal is to predict future user-item interactions based on past behavior.
+As a result, content recommendation is often approximated as an interaction prediction task, where the goal is to predict future user-item interactions based on past behavior @collaborative-filtering-implicit.
 
 Interaction prediction is a self-supervised learning task in which past user-item interactions serve first as labels and later as input features used to predict future interactions.
 Unlike other self-supervised tasks, it is distinguished by the inherently relational nature of the data: each interaction connects users and items, forming a web of dependencies that influence future behavior.
-As a result, these interactions are often modeled as user-item networks to highlight the structural relationships between entities.
+As a result, these interactions are often modeled as user-item networks to highlight the structural relationships between entities@indepth-survey-deep-learning-recommender-systems.
 
-Besides, the temporal dimension, which includes the order and timing of interactions, typically plays a critical role in accurately modeling and understanding user behavior over time.
+Besides, the temporal dimension, which includes the order and timing of interactions, typically plays a critical role in accurately modeling and understanding user behavior over time@considering-temporal-aspects-recommender-systems.
 One natural way to model both temporal and relational information is to use a temporal interaction network, that is, a network where each interaction is linked to a timestamp.
 This way, following the order of the timestamps reveals the network and its evolutions, presenting an ever-changing map of relationships between the users and the items and allowing for more nuanced and dynamic predictions.
-Yet, few solutions rely on this model, despite its intuitive definition, which motivated this work to look further into existing solutions.
+Yet, few solutions rely on this model, despite its intuitive definition, which motivated this work to look further into existing solutions@survey-dynamic-gnn.
 
 @limnet @article:limnet is a simple machine learning model designed to process temporal interactions in a causal manner, leveraging both relational information and the order of interactions.
 The model has demonstrated strong performance in tasks such as botnet detection in IoT networks, and it is built in a modular, adaptive way that makes it easy to apply to other problems.
@@ -53,7 +53,7 @@ Additionally, we implement and evaluate several architectural adaptations to @li
 
 == Limitations <i:delimitations>
 
-One alternative approach to interaction prediction involves building a classifier to determine whether a given user is likely to interact with a specific item.
+One alternative approach to interaction prediction involves building a classifier to determine whether a given user is likely to interact with a specific item@product-based-neural-networks.
 This approach is excluded from the present work, which instead focuses on computing embeddings and generating ranked item lists.
 
 Another limitation of this study is its strict focus on user-item networks.

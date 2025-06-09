@@ -20,7 +20,7 @@ Users and items play fundamentally different roles: users initiate interactions,
 This introduces a structural asymmetry in the network, where interactions are always directed from a user to an item.
 In practice, this means that prediction tasks are framed from the user's perspective, with the goal of identifying the most relevant items they are likely to interact with next.
 
-There are two primary approaches to this problem: one based on graph analytics and the other on feature-based methods.
+There are two primary approaches to this problem: one based on graph analytics and the other on feature-based methods@survey-link-prediction.
 Graph analytics focuses on measuring the proximity between a user and various items in the graph, leveraging insights from the user's past interactions and the behaviors of similar users.
 For instance, if two users have listened to the same set of songs, one may likely enjoy the songs the other has listened to.
 Graph theory offers a variety of methods to compute closeness between nodes, including shortest path lengths, the number of shared neighbors, or the exclusivity of those shared neighbors.
@@ -37,9 +37,9 @@ Lichtenwalter et al. proposed framing link prediction as a supervised machine le
 To incorporate relational data into the model, graph closeness metrics are added to the user and item features@new-perspectives-methods-link-prediction.
 This setup uses graph structure not as the direct basis for prediction but as a source of enriched features, enabling machine learning algorithms to work with abstracted representations of the graph.
 
-Despite their strengths, these methods share a common drawback: for each user, a score must be computed for every possible item to generate a recommendation.
+Despite their strengths, these methods share a common drawback: for each user, a score must be computed for every possible item to generate a recommendation@item-based-collaborative-filtering.
 This becomes computationally infeasible when dealing with large item catalogs.
-A common solution is to learn high-dimensional embeddings for users and items separately and then compute a similarity score, such as a dot product or distance measure, to rank items.
+A common solution is to learn high-dimensional embeddings for users and items separately and then compute a similarity score, such as a dot product or distance measure, to rank items@deep-neural-networks-youtube.
 This transforms the problem into a nearest-neighbor search, a well-studied task with many efficient and scalable solutions.
 
 == Graph Representation Learning <bg:grl>
