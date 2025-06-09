@@ -27,7 +27,7 @@ Finally, we discuss in @m:baselines exploration we conducted with the baselines.
 
 == Datasets <m:datasets>
 
-This project uses three publicly available datasets sourced from the Stanford Large Network Dataset Collection (accessible at #link("snap.stanford.edu/jodie/#datasets")).
+This project uses three publicly available datasets sourced from the Stanford Large Network Dataset Collection#footnote("Accessible at " + link("snap.stanford.edu/jodie/#datasets") + ".").
 These datasets were originally compiled by Kumar et al. @jodie and have since become widely adopted as de facto standard benchmarks for evaluating interaction prediction models.
 
 *- Wikipedia edits:*
@@ -75,8 +75,7 @@ Despite these differences, a fair and consistent evaluation across models must b
 This complexity is further amplified in the case of temporal graphs, which can be interpreted in multiple ways depending on the structural and temporal aspects one wishes to emphasize.
 A temporal graph may be decomposed into a sequence of static snapshots taken at regular intervals, represented as a continuous time series of events, or treated as a dynamic structure where nodes and edges evolve over time @survey-dynamic-gnn/* More reference needed */.
 These different interpretations offer varied trade-offs in terms of temporal resolution, scalability, expressiveness, and design opportunities, without any single approach being universally optimal.
-
-Our implementation is publicly available on GitHub at: #link("https://github.com/mazerti/link-prediction").
+Our implementation is publicly available on GitHub #footnote("https://github.com/mazerti/link-prediction").
 
 The following subsections describe the design choices that guided the development of our evaluation framework.
 These are organized into four key components: data preparation, batching strategy, evaluation and training loop, and embedding comparison.
