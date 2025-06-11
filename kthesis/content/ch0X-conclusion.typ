@@ -54,14 +54,22 @@ An ablation study focusing on Jodie's architectural components could shed light 
 /* What are the relevant economic, social, environmental, and ethical aspects of your work? */
 
 == Ethics and Sustainability <c:ethics>
-// move to conclusion
+
+=== Ethical aspects
 
 As machine learning systems increasingly rely on large-scale data and compute resources, there is growing concern about widening inequalities that favor large institutions.
-@limnet offers potential mitigation through three architectural and practical strengths:
+Additional research on the @limnet architecture could offer potential mitigation through three architectural and practical strengths:
 
 + Its scalability and lightweight design reduce infrastructure requirements, lowering the barrier to entry.
 + Ongoing efforts to develop decentralized and collaborative versions of @limnet @metasoma could empower communities to deploy models using distributed resources.
 + This project's public availability enhances accessibility for regulators and policymakers, contributing to more informed legislative decision-making in an area still filled with uncertainty.
 
-On the environmental front, while @limnet's efficiency may reduce the cost of computation, it is still unclear whether improved efficiency translates into net energy savings in the long term @rebound-effect-no-backfire.
-This consideration highlights the need for continued attention to the ecological impact of machine learning research and deployment.
+=== Societal impact
+
+Better observed performances could have contributed to improve the performance and cost of retrieval pipelines, enabling people with better and faster access to information at a reduced cost.
+Unfortunately, with the underwhelming predictions performed by @limnet compared to the state-of-the-art baseline, this project lost its impact potential and is therefore mostly dedicated to an academic use.
+
+=== Sustainability
+
+While @limnet's efficiency had the potential to reduce the cost of computation, it is still unclear whether improved efficiency translates into net energy savings in the long term @rebound-effect-no-backfire.
+This consideration highlights not only the need for continued attention to the ecological impact of machine learning research and deployment, but more importantly the importance of societal awareness about sustainability compared with innovation.
