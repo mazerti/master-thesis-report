@@ -58,6 +58,7 @@
       title: "Prédiction d'interaction à l'aide de Lightweight Memory Networks",
       subtitle: "Généralization de l'architecture LiMNet",
       abstract: include "./content/abstract-3-fr.typ",
+      abstract-heading: "Résumé",
       keywords: (
         "Apprentissage de représentation de graphes.",
         "Réseaux d'interaction temporels",
