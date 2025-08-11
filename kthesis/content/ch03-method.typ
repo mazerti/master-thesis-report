@@ -75,9 +75,8 @@ Despite these differences, a fair and consistent evaluation across models must b
 This complexity is further amplified in the case of temporal graphs, which can be interpreted in multiple ways depending on the structural and temporal aspects one wishes to emphasize.
 A temporal graph may be decomposed into a sequence of static snapshots taken at regular intervals, represented as a continuous time series of events, or treated as a dynamic structure where nodes and edges evolve over time @survey-dynamic-gnn/* More reference needed */.
 These different interpretations offer varied trade-offs in terms of temporal resolution, scalability, expressiveness, and design opportunities, without any single approach being universally optimal.
-Our implementation is publicly available on GitHub #footnote("https://github.com/mazerti/link-prediction").
 
-The following subsections describe the design choices that guided the development of our evaluation framework.
+The following subsections describe the design choices that guided the development of our evaluation framework#footnote("https://github.com/mazerti/link-prediction").
 These are organized into four key components: data preparation, batching strategy, evaluation and training loop, and embedding comparison.
 
 === Data preparation <m:inputs>
@@ -97,7 +96,7 @@ While calculating this value at inference time would be computationally expensiv
 
 Temporal interaction modeling inherently involves a tradeoff between preserving the sequential nature of data and maximizing training efficiency through parallelism.
 As highlighted in prior work @jodie @deepred, maintaining causality often comes at the cost of reduced parallelization capabilities.
-In the JODIE model, Kumar et al. addressed this by designing a graph-structure-aware batching strategy that retains temporal coherence while enabling some degree of parallel processing @jodie.
+In the Jodie model, Kumar et al. addressed this by designing a graph-structure-aware batching strategy that retains temporal coherence while enabling some degree of parallel processing @jodie.
 Meanwhile, Kefato et al. proposed an alternative in DeePRed by eliminating recursion entirely, replacing dynamic embeddings with static approximations to simplify training @deepred.
 
 Drawing inspiration from the original @limnet framework @article:limnet, we adopt a different approach: slicing the dataset into fixed-size sequences.
@@ -154,8 +153,8 @@ $ "L2_score"(bold(e)^"user", bold(e)^"item") = root(k, norm(bold(e)^"user" - bol
 
 For this score, smaller values correspond to closer embeddings and are therefore ranked higher.
 
-In all experiments conducted in this work, performance is measured using both scoring methods.
-The highest result obtained between the two is reported to ensure fair evaluation across models.
+In practice, we find that dot-product scoring yields slightly better predictions when applied to normalized models (as described later on, in @m:normalize), whereas L2 distance performs better for the more straightforward free-form embeddings such as those used by Jodie.
+To ensure a fair comparison across all models, performance in all experiments is measured using both scoring methods, with only the best prediction results from either method being reported.
 
 === Code Reusability <m:code-quality>
 
@@ -210,6 +209,17 @@ We hypothesized that this omission could lead to a loss of valuable temporal inf
 To test this assumption, we introduced time-based features aimed at capturing when each interaction occurred.
 Specifically, we sought to model cyclic behavioral patterns such as differences in user activity between weekdays and weekends, or between day and night.
 
+Such patterns emerge in user-item interactions when certain types of items are more suited to specific activities.
+For example, work-related items are typically accessed more during office hours, whereas leisure-related items tend to see higher engagement in the evenings and on weekends.
+In the case of global services, these patterns may also reflect variations in popularity across different time zones.
+@fig:temporal-pattern-example illustrates this phenomenon using two tracks from the LastFM dataset, each displaying distinct preferred listening times.
+
+#figure(
+  image("../../../../figures/temporal-pattern-example.png"),
+  caption: "Example of two items with significantly distinct daily patterns within the LastFM Dataset.",
+  placement: auto,
+) <fig:temporal-pattern-example>
+
 However, our datasets only include relative timestamps, which obscure the exact timing of interactions.
 As a workaround, we approximated cyclic patterns by applying a frequency decomposition to the timestamps.
 We computed two features to represent temporal cycles:
@@ -250,17 +260,6 @@ This design choice aims to help the model capture more complex patterns in user-
 
 == Baseline <m:baselines>
 
-We evaluated the performance of @limnet against Jodie, a state-of-the-art cross-RNN model for learning embeddings in temporal interaction networks.
+We evaluated the performance of @limnet against Jodie, a state-of-the-art cross-RNN model for learning embeddings in temporal interaction networks, described in further details in @bg:jodie.
 We also attempted to implement DeePRed @deepred, but were unable to reproduce the performance reported in the original paper.
 As a result, DeePRed was excluded from our experimental comparisons.
-
-Jodie, described in @jodie, shares the foundational use of cross-RNN embeddings with @limnet but differs in three important ways.
-First, Jodie enhances its dynamic embeddings with one-hot representations of users and items to form the final embedding vectors.
-Second, it incorporates time deltas between consecutive user interactions via a projection mechanism designed to anticipate the trajectory of embeddings.
-Third, the model employs a specialized loss function to ensure that user and item embeddings do not shift too drastically in response to a single interaction.
-
-Our implementation of Jodie differs from the original in two respects.
-We replaced the t-batch algorithm, used for creating training batches in the original paper, with fixed-length interaction sequences and omitted interaction features for the sake of simplicity.
-While Jodie does not require re-training to incorporate new interactions, it lacks @limnet's ability to dynamically handle the insertion or deletion of users and items.
-
-These distinctions make Jodie a strong and informative baseline for evaluating @limnet's generalization to user-item interaction prediction tasks.

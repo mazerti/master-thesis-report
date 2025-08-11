@@ -168,3 +168,6 @@
 #bibliography("../../../bibliography.bib", title: "References")
 
 #show: setup-appendices
+#include "content/z-appendix.typ"
+
+#show: setup-appendices

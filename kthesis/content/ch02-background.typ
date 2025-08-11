@@ -76,7 +76,7 @@ A popular approach for leveraging temporal data when generating node embeddings 
 One foundational model in this domain is DeepCoevolve @deepcoevolve, a model for link prediction that uses two components: a cross-RNN (further detailed in @bg:cross-rnn) to update user and item representations, and an intensity function to predict the likelihood of future interactions at any given time.
 Following DeepCoevolve, several cross-RNN-based models have been proposed, achieving notable performance improvements.
 
-JODIE @jodie extends DeepCoevolve by introducing a static embedding component alongside the dynamic one.
+Jodie @jodie extends DeepCoevolve by introducing a static embedding component alongside the dynamic one.
 The cross-RNN tracks the trajectory of users and items over time, while a neural projection layer predicts their future embeddings at different time steps, replacing the intensity function used in DeepCoevolve.
 
 DeePRed @deepred builds upon DeepCoevolve with the goal of simplifying and accelerating training by removing recurrence from the cross-RNN mechanism.
@@ -85,7 +85,7 @@ The absence of long-term memory is addressed through the use of a sliding contex
 
 == Cross-RNN <bg:cross-rnn>
 
-The key mechanism underlying the models discussed in the previous section is known as cross-RNN, where #gls("rnn", long: false) stands for Recurrent Neural Network.
+The key mechanism underlying the models discussed in the previous section (DeepCoevolve, Jodie, DeePRed) is known as cross-RNN, where #gls("rnn", long: false) stands for Recurrent Neural Network.
 A @rnn is a type of neural network designed to process sequential data by maintaining and updating a memory state across time steps.
 Formally, a @rnn layer is defined as:
 
@@ -99,18 +99,18 @@ Popular @rnn architectures, such as @lstm and @gru, are designed to retain long-
 @lstm maintains two types of memory (short-term and long-term), whereas @gru simplifies this structure by using a single memory vector with a gating mechanism.
 In practice, @gru:pl achieve performance comparable to @lstm:pl while being computationally less demanding @gated-recurrent-nn-on-sequence-modelling.
 
-A cross-RNN layer extends this concept by maintaining separate memory states for all nodes in a graph.
+A cross-RNN layer is another type of neural network layer that extends the concept of a @rnn by maintaining separate memory states for all nodes in a graph.
 At time $t$, the memory is represented as:
 $bold(H)_t = (bold(h)_t^u)_(u in UU) union (bold(h)_t^i)_(i in II)$
 where $UU$ and $II$ denote the sets of users and items, respectively.
 For each interaction $(u,i,t,bold(f))$, the memory states of the involved user $u$ and item $i$ are updated according to:
 
-$ bold(h)_t^u = g^u (bold(h)_(t-1)^u, bold(h)_(t-1)^i, t, bold(f)) $
-$ bold(h)_t^i = g^i (bold(h)_(t-1)^i, bold(h)_(t-1)^u, t, bold(f)) $
+$ bold(h)_t^u = g^UU (bold(h)_(t-1)^u, bold(h)_(t-1)^i, t, bold(f)) $
+$ bold(h)_t^i = g^II (bold(h)_(t-1)^i, bold(h)_(t-1)^u, t, bold(f)) $
 
 For all other nodes $v in (UU \\ {u}) union (II \\ {i})$, the memory remains unchanged.
 
-Here, $g^u$ and $g^i$ are node-type-specific update functions analogous to $g$ in a standard @rnn.
+Here, $g^UU$ and $g^II$ are node-type-specific update functions analogous to $g$ in a standard @rnn.
 @lstm and @gru cells can be used within the cross-RNN framework, with the key distinction that memory management is handled externally to the cell.
 
 The primary advantage of cross-RNN architectures is their inherent preservation of causality.
@@ -128,14 +128,37 @@ Since the other components are task-specific, the term #quote("LiMNet") in this 
 
 As a graph embedding module, @limnet provides a straightforward implementation of a cross-RNN mechanism, @fig:limnet proposes a visualization of its architecture.
 This simplicity offers two main advantages.
-First, @limnet is highly efficient at inference time, with memory requirements that scale linearly with the number of nodes in the network.
+First, @limnet is highly efficient at inference time, with memory requirements that scale linearly with the number of nodes in the network (a formal complexity analysis is provided in @ap:complexity).
 Second, it offers strong flexibility in handling dynamic node sets: when a new node is introduced, its embedding can be computed immediately without retraining the model.
 Deleting a node is even simpler: its embedding can just be removed from memory without consequences for the other embeddings.
 
-@limnet has already demonstrated promising results in tasks such as IoT botnet detection @article:limnet and cryptocurrency fraud detection @limnet-finance-classification. Given its design and prior success, it is a compelling candidate for interaction prediction tasks, particularly in settings where computational efficiency is a key constraint.
+@limnet has already shown promising results in domains such as IoT botnet detection@article:limnet and cryptocurrency fraud detection@limnet-finance-classification.
+However, it has yet to be evaluated for interaction prediction on user-item networks.
+Given its design and prior successes, it stands as a compelling candidate for this task.
 
 #figure(
   image("../../../../figures/limnet-architecture.svg", width: 70%),
   caption: "Architecture of LiMNet.",
   placement: auto,
 ) <fig:limnet>
+
+== Jodie <bg:jodie>
+
+Jodie, introduced in@jodie, is a state-of-the-art architecture that, like @limnet, builds on cross-RNN embeddings.
+The difference lies in additional output modules added in the Jodie architecture to refine predictions.
+First, Jodie enriches its dynamic embeddings by concatenating one-hot representations of users and items to form the final embedding vectors.
+Second, it incorporates the elapsed time between consecutive user interactions through a projection mechanism designed to anticipate the future trajectory of embeddings.
+Third, it employs a specialized loss function to prevent user and item embeddings from shifting excessively in response to a single interaction.
+
+#figure(
+  image("../../../../figures/jodie-architecture.svg"),
+  caption: "Architecture of Jodie.",
+  placement: auto,
+) <fig:jodie>
+
+Our implementation of Jodie differs from the original in two key ways.
+We replaced the t-batch algorithm used for creating training batches with fixed-length interaction sequences and omitted interaction features for simplicity.
+
+These differences make Jodie a strong and informative baseline for assessing @limnet's ability to generalize to user-item interaction prediction tasks.
+Moreover, given Jodie's already strong performance on temporal interaction networks, we hypothesize that removing its additional output modules, down to the @limnet architecture, could yield notable gains in inference speed and latency as suggested by the theoretical complexity analysis detailed in @ap:complexity.
+Additionally, while Jodie does not require retraining to integrate new interactions, it lacks @limnet's ability to dynamically handle the insertion or deletion of users and items.
